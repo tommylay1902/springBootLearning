@@ -211,7 +211,7 @@ class CustomerServiceTest {
 
         String name = "Tommy Lay";
         CustomerUpdateRequest request = new CustomerUpdateRequest(null, null, 300);
-        
+
         //When
         underTest.updateCustomerInfo(id, request);
 
