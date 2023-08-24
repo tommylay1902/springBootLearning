@@ -1,8 +1,8 @@
 package com.amigoscode.journey;
 
 import com.amigoscode.customer.Customer;
-import com.amigoscode.customer.CustomerController;
 import com.amigoscode.customer.CustomerRegistrationRequest;
+import com.amigoscode.customer.CustomerUpdateRequest;
 import com.github.javafaker.Faker;
 import com.github.javafaker.Name;
 import org.junit.jupiter.api.Test;
@@ -35,14 +35,13 @@ public class CustomerIntegrationTest {
         String name = fakerName.fullName();
         String email = fakerName.firstName() + UUID.randomUUID() + "@gmail.com";
 
-        Integer age = RANDOM.nextInt(1,100);
-
+        int age = RANDOM.nextInt(1,100);
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, age);
         //send a post request
         //    NEVER DO THIS!!! We never want to invoke the method directly from the controller
         //    @Autowired
-        //    private CustomerController customerController
+        //    private CustomerController controller
 
         webTestClient.post().uri(baseURI)
                 .accept(MediaType.APPLICATION_JSON)
@@ -68,8 +67,8 @@ public class CustomerIntegrationTest {
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
                 .contains(expectedCustomer);
 
-
         //get customer by id
+        assert customers != null;
         Long id = customers.stream()
                 .filter(c -> c.getEmail().equals(email))
                 .map(Customer::getId)
@@ -95,7 +94,7 @@ public class CustomerIntegrationTest {
         String name = fakerName.fullName();
         String email = fakerName.firstName() + UUID.randomUUID() + "@gmail.com";
 
-        Integer age = RANDOM.nextInt(1,100);
+        int age = RANDOM.nextInt(1,100);
 
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, age);
@@ -108,9 +107,6 @@ public class CustomerIntegrationTest {
                 .exchange()
                 .expectStatus()
                 .is2xxSuccessful();
-
-        //create the expected customer
-        Customer expectedCustomer = new Customer( name, email, age);
 
         //get all customers
         List<Customer> customers = webTestClient.get()
@@ -130,7 +126,6 @@ public class CustomerIntegrationTest {
                 .findFirst()
                 .orElseThrow();
 
-
         //delete customer
         webTestClient.delete().uri(baseURI + "/{id}", id).exchange().expectStatus().is2xxSuccessful();
 
@@ -140,5 +135,77 @@ public class CustomerIntegrationTest {
                 .exchange()
                 .expectStatus()
                 .is4xxClientError();
+    }
+
+    @Test
+    void canUpdateCustomer(){
+        //CREATE A CUSTOMER
+        Faker faker = new Faker();
+        Name fakerName = faker.name();
+
+        String name = fakerName.fullName();
+        String email = fakerName.firstName() + UUID.randomUUID() + "@gmail.com";
+
+        int age = RANDOM.nextInt(1,100);
+
+
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, age);
+        //send a post request
+        webTestClient.post().uri(baseURI)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Mono.just(request), CustomerRegistrationRequest.class)
+                //.exchange is sending the request
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+
+        //get all customers
+        List<Customer> customers = webTestClient.get()
+                .uri(baseURI)
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful()
+                .expectBodyList(new ParameterizedTypeReference<Customer>() {})
+                .returnResult()
+                .getResponseBody();
+
+        //get customer by id
+        assert customers != null;
+        Long id = customers.stream()
+                .filter(c -> c.getEmail().equals(email))
+                .map(Customer::getId)
+                .findFirst()
+                .orElseThrow();
+
+        //create update request
+        Name fakerNameUpdate = faker.name();
+
+        String nameUpdate = fakerNameUpdate.fullName();
+        String emailUpdate = fakerNameUpdate.firstName() + UUID.randomUUID() + "@gmail.com";
+        int ageUpdate = RANDOM.nextInt(1,100);
+
+        CustomerUpdateRequest expected = new CustomerUpdateRequest(nameUpdate, emailUpdate,  ageUpdate);
+
+        webTestClient.put().uri(baseURI + "/{id}", id)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Mono.just(expected), CustomerUpdateRequest.class)
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+
+        //get the updated customer
+        Customer actual = webTestClient.get()
+                .uri(baseURI + "/{id}", id)
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful()
+                .expectBody(new ParameterizedTypeReference<Customer>() {})
+                .returnResult()
+                .getResponseBody();
+
+        //test expected to actual
+        assertThat(actual).usingRecursiveComparison().ignoringFields("id").isEqualTo(expected);
     }
 }
