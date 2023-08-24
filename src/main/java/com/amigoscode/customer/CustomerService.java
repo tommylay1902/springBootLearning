@@ -28,7 +28,7 @@ public class CustomerService {
 
     public void addCustomer(CustomerRegistrationRequest customerRegistrationRequest){
         if(customerDAO.existsPersonWithEmail(customerRegistrationRequest.email())){
-            throw new ResourceNotFoundException("Email is not unique");
+            throw new DuplicateResourceException("Email is not unique");
         }
         customerDAO.insertCustomer(new Customer(
                 customerRegistrationRequest.name(),

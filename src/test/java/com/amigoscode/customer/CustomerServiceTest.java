@@ -1,7 +1,9 @@
 package com.amigoscode.customer;
 
+import com.amigoscode.exception.DuplicateResourceException;
 import com.amigoscode.exception.RequestValidationException;
 import com.amigoscode.exception.ResourceNotFoundException;
+import jakarta.annotation.Resource;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,8 +20,8 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CustomerServiceTest {
@@ -40,6 +42,21 @@ class CustomerServiceTest {
         underTest.getAllCustomers();
         //Then
         verify(customerDao).selectAllCustomer();
+    }
+
+    @Test
+    void willThrowWhenGetCustomerReturnsEmptyOptional() {
+        //Given
+        Long id = 1L;
+        //tells the mock exactly what to do
+        //so when we call the function
+        //then we will return the optional of that customer
+        when(customerDao.selectCustomerById(id)).thenReturn(Optional.empty());
+        //When
+        //Then
+        assertThatThrownBy(() -> underTest.getCustomer(id))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Customer resource not found");
     }
 
     @Test
@@ -68,38 +85,46 @@ class CustomerServiceTest {
     }
 
     @Test
-    void willThrowWhenGetCustomerReturnsEmptyOptional() {
+    void willThrowWhenAddCustomerHasDuplicateEmail() {
+        //Given
+        String email = "tommy@gmail.com";
+
+        when(customerDao.existsPersonWithEmail(email)).thenReturn(true);
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest("tommy", "tommy@gmail.com", 26);
+
+
+        //When
+        assertThatThrownBy(() -> underTest.addCustomer(request))
+                .isInstanceOf(DuplicateResourceException.class)
+                .hasMessage("Email is not unique");
+
+        //Then
+        verify(customerDao, never()).insertCustomer(any());
+
+    }
+
+
+    @Test
+    void canDeleteCustomer() {
         //Given
         Long id = 1L;
-        //tells the mock exactly what to do
-        //so when we call the function
-        //then we will return the optional of that customer
-        when(customerDao.selectCustomerById(id)).thenReturn(Optional.empty());
         //When
+        when(customerDao.existsPersonWithId(id)).thenReturn(true);
+        underTest.deleteCustomer(id);
         //Then
-        assertThatThrownBy(() -> underTest.getCustomer(id))
+        verify(customerDao).deleteCustomerWithId(id);
+    }
+
+    @Test
+    void willThrowWhenIdNotUniqueDeleteCustomer() {
+        //Given
+        Long id = 1L;
+        //When
+        when(customerDao.existsPersonWithId(id)).thenReturn(false);
+        //Then
+        assertThatThrownBy(()-> underTest.deleteCustomer(id))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Customer resource not found");
-    }
-
-    @Test
-    void canInsertCustomer() {
-        //Given
-        Customer customer = new Customer(1L, "tommy", "tommylay@gmail.com", 22);
-
-        //When
-
-        //Then
-
-    }
-
-    @Test
-    void deleteCustomer() {
-        //Given
-
-        //When
-
-        //Then
+                .hasMessage("Customer not found");
     }
 
     @Test
