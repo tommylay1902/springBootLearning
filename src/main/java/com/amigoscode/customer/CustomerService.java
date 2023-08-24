@@ -28,7 +28,7 @@ public class CustomerService {
 
     public void addCustomer(CustomerRegistrationRequest customerRegistrationRequest){
         if(customerDAO.existsPersonWithEmail(customerRegistrationRequest.email())){
-            throw new DuplicateResourceException("Email is not unique");
+            throw new DuplicateResourceException("Email not found");
         }
         customerDAO.insertCustomer(new Customer(
                 customerRegistrationRequest.name(),
@@ -60,7 +60,7 @@ public class CustomerService {
                 && !customerUpdateRequest.email().get().equals(customerToUpdate.getEmail())
         ){
             if(customerDAO.existsPersonWithEmail(customerToUpdate.getEmail())){
-                throw new DuplicateResourceException("email is already taken");
+                throw new DuplicateResourceException("Email is already taken");
             }
             customerToUpdate.setEmail(customerUpdateRequest.email().get());
             changes = true;
@@ -73,7 +73,7 @@ public class CustomerService {
             changes=true;
         }
         if(!changes){
-            throw new RequestValidationException("no changes found");
+            throw new RequestValidationException("No changes found");
         }
         customerDAO.updateCustomer(customerToUpdate);
 

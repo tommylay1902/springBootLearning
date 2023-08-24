@@ -52,7 +52,6 @@ class CustomerServiceTest {
         //so when we call the function
         //then we will return the optional of that customer
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.empty());
-        //When
         //Then
         assertThatThrownBy(() -> underTest.getCustomer(id))
                 .isInstanceOf(ResourceNotFoundException.class)
@@ -63,9 +62,7 @@ class CustomerServiceTest {
     void addCustomer() {
         //Given
         String email = "tommy@gmail.com";
-        //tells the mock exactly what to do
-        //so when we call the function
-        //then we will return the optional of that customer
+
         when(customerDao.existsPersonWithEmail(email)).thenReturn(false);
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest("tommy", "tommy@gmail.com", 26);
@@ -90,13 +87,13 @@ class CustomerServiceTest {
         String email = "tommy@gmail.com";
 
         when(customerDao.existsPersonWithEmail(email)).thenReturn(true);
-        CustomerRegistrationRequest request = new CustomerRegistrationRequest("tommy", "tommy@gmail.com", 26);
 
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest("tommy", "tommy@gmail.com", 26);
 
         //When
         assertThatThrownBy(() -> underTest.addCustomer(request))
                 .isInstanceOf(DuplicateResourceException.class)
-                .hasMessage("Email is not unique");
+                .hasMessage("Email not found");
 
         //Then
         verify(customerDao, never()).insertCustomer(any());
