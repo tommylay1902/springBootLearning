@@ -1,7 +1,5 @@
 package com.amigoscode.customer;
 
-import com.amigoscode.Main;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -33,7 +31,7 @@ public class Customer {
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)
-    private int age;
+    private Integer age;
 
     public Customer(){
 
@@ -76,11 +74,11 @@ public class Customer {
         this.email = email;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 

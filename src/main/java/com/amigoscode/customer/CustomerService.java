@@ -48,28 +48,28 @@ public class CustomerService {
         boolean changes = false;
 
         if(
-                customerUpdateRequest.name().isPresent()
-                && !customerUpdateRequest.name().get().equals(customerToUpdate.getName())
+                customerUpdateRequest.name() != null
+                && !customerUpdateRequest.name().equals(customerToUpdate.getName())
         ){
-            customerToUpdate.setName(customerUpdateRequest.name().get());
+            customerToUpdate.setName(customerUpdateRequest.name());
             changes = true;
         }
 
         if(
-                customerUpdateRequest.email().isPresent()
-                && !customerUpdateRequest.email().get().equals(customerToUpdate.getEmail())
+                customerUpdateRequest.email() != null
+                && !customerUpdateRequest.email().equals(customerToUpdate.getEmail())
         ){
-            if(customerDAO.existsPersonWithEmail(customerToUpdate.getEmail())){
+            if(customerDAO.existsPersonWithEmail(customerUpdateRequest.email())){
                 throw new DuplicateResourceException("Email is already taken");
             }
-            customerToUpdate.setEmail(customerUpdateRequest.email().get());
+            customerToUpdate.setEmail(customerUpdateRequest.email());
             changes = true;
         }
         if(
-                customerUpdateRequest.age().isPresent()
-                && !customerUpdateRequest.age().get().equals(customerToUpdate.getAge())
+                customerUpdateRequest.age() !=  null
+                && !customerUpdateRequest.age().equals(customerToUpdate.getAge())
         ){
-            customerToUpdate.setAge(customerUpdateRequest.age().get());
+            customerToUpdate.setAge(customerUpdateRequest.age());
             changes=true;
         }
         if(!changes){
