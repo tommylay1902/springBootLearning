@@ -6,6 +6,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -42,19 +43,28 @@ class CustomerServiceTest {
     }
 
     @Test
-    void canGetCustomer() {
+    void addCustomer() {
         //Given
-        Long id = 1L;
-        Customer customer = new Customer(id, "tommy", "tommy@gmail.com", 22);
+        String email = "tommy@gmail.com";
         //tells the mock exactly what to do
         //so when we call the function
         //then we will return the optional of that customer
-        when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
-        //When
+        when(customerDao.existsPersonWithEmail(email)).thenReturn(false);
 
-        Customer actual = underTest.getCustomer(id);
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest("tommy", "tommy@gmail.com", 26);
+        //When
+        underTest.addCustomer(request);
+
         //Then
-        assertThat(actual).isEqualTo(customer);
+        ArgumentCaptor<Customer> customerArgumentCaptor = ArgumentCaptor.forClass(Customer.class);
+        verify(customerDao).insertCustomer(customerArgumentCaptor.capture());
+
+        Customer capturedCustomer = customerArgumentCaptor.getValue();
+        //these tests will make sure that the inputted data is what is actually saved to the database
+        assertThat(capturedCustomer.getId()).isNull();
+        assertThat(capturedCustomer.getAge()).isEqualTo(request.age());
+        assertThat(capturedCustomer.getEmail()).isEqualTo(request.email());
+        assertThat(capturedCustomer.getName()).isEqualTo(request.name());
     }
 
     @Test
