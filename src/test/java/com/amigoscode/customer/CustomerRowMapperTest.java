@@ -30,16 +30,15 @@ class CustomerRowMapperTest {
         when(resultSet.getString("name")).thenReturn("tommy");
         when(resultSet.getString("email")).thenReturn("tommy@gmail.com");
         when(resultSet.getInt("age")).thenReturn(22);
+
         //When
-        Customer customer = customerRowMapper.mapRow(resultSet, 1);
+        Customer actual = customerRowMapper.mapRow(resultSet, 1);
+
+        Customer expected = new Customer(1L, "tommy", "tommy@gmail.com", 22);
 
         //Then
 
-        assertThat(customer).isNotNull();
-        assertThat(customer.getId()).isEqualTo(1L);
-        assertThat(customer.getName()).isEqualTo("tommy");
-        assertThat(customer.getEmail()).isEqualTo("tommy@gmail.com");
-        assertThat(customer.getAge()).isEqualTo(22);
+        assertThat(actual).isEqualTo(expected);
 
 
     }
