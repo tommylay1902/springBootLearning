@@ -150,12 +150,12 @@ public class CustomerIntegrationTest {
 
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, age);
-        //send a post request
+        //send a post updateRequest
         webTestClient.post().uri(baseURI)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(request), CustomerRegistrationRequest.class)
-                //.exchange is sending the request
+                //.exchange is sending the updateRequest
                 .exchange()
                 .expectStatus()
                 .is2xxSuccessful();
@@ -178,19 +178,19 @@ public class CustomerIntegrationTest {
                 .findFirst()
                 .orElseThrow();
 
-        //create update request
+        //create update updateRequest
         Name fakerNameUpdate = faker.name();
 
         String nameUpdate = fakerNameUpdate.fullName();
         String emailUpdate = fakerNameUpdate.firstName() + UUID.randomUUID() + "@gmail.com";
         int ageUpdate = RANDOM.nextInt(1,100);
 
-        CustomerUpdateRequest expected = new CustomerUpdateRequest(nameUpdate, emailUpdate,  ageUpdate);
+        CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(nameUpdate, emailUpdate,  ageUpdate);
 
         webTestClient.put().uri(baseURI + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(Mono.just(expected), CustomerUpdateRequest.class)
+                .body(Mono.just(updateRequest), CustomerUpdateRequest.class)
                 .exchange()
                 .expectStatus()
                 .is2xxSuccessful();
@@ -205,7 +205,9 @@ public class CustomerIntegrationTest {
                 .returnResult()
                 .getResponseBody();
 
-        //test expected to actual
+        Customer expected = new Customer(id, nameUpdate, emailUpdate, ageUpdate);
+
+        //test updateRequest to actual
         assertThat(actual).usingRecursiveComparison().ignoringFields("id").isEqualTo(expected);
     }
 }
