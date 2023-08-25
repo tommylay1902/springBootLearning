@@ -93,7 +93,7 @@ class CustomerServiceTest {
         //When
         assertThatThrownBy(() -> underTest.addCustomer(request))
                 .isInstanceOf(DuplicateResourceException.class)
-                .hasMessage("Email not found");
+                .hasMessage("Email already exists");
 
         //Then
         verify(customerDao, never()).insertCustomer(any());

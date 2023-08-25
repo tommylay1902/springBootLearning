@@ -28,7 +28,7 @@ public class CustomerService {
 
     public void addCustomer(CustomerRegistrationRequest customerRegistrationRequest){
         if(customerDAO.existsPersonWithEmail(customerRegistrationRequest.email())){
-            throw new DuplicateResourceException("Email not found");
+            throw new DuplicateResourceException("Email already exists");
         }
         customerDAO.insertCustomer(new Customer(
                 customerRegistrationRequest.name(),
