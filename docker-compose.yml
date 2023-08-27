@@ -27,12 +27,24 @@ services:
     networks:
       - postgres
     restart: unless-stopped
+
+  amigoscode-api:
+    container_name: amigoscode-api
+    image: tommylay1902/amigoscode-api
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/customer
+    ports:
+      - "8080:8080"
+    networks:
+      - postgres
     depends_on:
       - db
+    restart: unless-stopped
 
 networks:
   postgres:
     driver: bridge
+
 
 volumes:
   postgres:
