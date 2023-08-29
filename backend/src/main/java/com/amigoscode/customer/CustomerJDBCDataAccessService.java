@@ -58,7 +58,7 @@ public class CustomerJDBCDataAccessService implements CustomerDAO{
                     """
                         SELECT count(id)
                         FROM customer
-                        WHERE email = ?
+                        WHERE name = ?
                      """;
 
         Long count = jdbcTemplate.queryForObject(sql, Long.class, email);
