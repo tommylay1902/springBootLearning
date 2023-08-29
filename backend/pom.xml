@@ -23,6 +23,29 @@
 		<docker.image.tag/>
 	</properties>
 
+	<profiles>
+		<profile>
+			<id>github-actions</id>
+			<activation>
+				<property>
+					<name>env.BUILD_NUMBER</name>
+				</property>
+			</activation>
+			<properties>
+				<docker.image.tag>${env.BUILD_NUMBER}</docker.image.tag>
+			</properties>
+		</profile>
+		<profile>
+			<id>local-build</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<docker.image.tag>latest</docker.image.tag>
+			</properties>
+		</profile>
+	</profiles>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.postgresql</groupId>
