@@ -8,6 +8,6 @@ public class PingPongController {
     record PingPong(String result){}
     @GetMapping("/ping")
     public PingPong getPingPong(){
-        return new PingPong("pong but no ping and pong and no ping test josie");
+        return new PingPong("pong but no ping and pong and no ping test josie josie");
     }
 }
