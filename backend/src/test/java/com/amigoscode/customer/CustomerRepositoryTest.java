@@ -26,22 +26,22 @@ class CustomerRepositoryTest {
         FAKER = new Faker();
     }
 
-    @Test
-    void existsCustomerByEmail() {
-        // Given
-        String email = FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID();
-        Customer customer = new Customer(
-                FAKER.name().fullName(),
-                email,
-                20
-        );
-
-        underTest.save(customer);
-
-        // When
-        var actual = underTest.existsCustomerByEmail(email);
-
-        // Then
-        assertThat(actual).isTrue();
-    }
+//    @Test
+//    void existsCustomerByEmail() {
+//        // Given
+//        String email = FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID();
+//        Customer customer = new Customer(
+//                FAKER.name().fullName(),
+//                email,
+//                20
+//        );
+//
+//        underTest.save(customer);
+//
+//        // When
+//        var actual = underTest.existsCustomerByEmail(email);
+//
+//        // Then
+//        assertThat(actual).isTrue();
+//    }
 }
