@@ -36,4 +36,4 @@ jobs:
           java-version: '17'
           cache: 'maven'
       - name: Build and run Unit/Integration Tests with Maven
-        run: mvn -ntp -B verify -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }} -Djib.to.auth.username=tommylay1902
+        run: mvn -ntp -B verify -Djib.to.auth.password=${{ secrets.DOCKERHUB_ACCESS_TOKEN }} -Djib.to.auth.username=${{secrets.DOCKERHUB_USERNAME}}
