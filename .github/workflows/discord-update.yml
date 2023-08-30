@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
       - name: Set commit URL
         id: commit-url
         run: echo "COMMIT_URL=https://github.com/${{ github.repository }}/commit/${{ github.sha }}" >>  $GITHUB_OUTPUT
