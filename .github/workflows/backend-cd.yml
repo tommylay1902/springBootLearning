@@ -32,6 +32,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: update slack with starting deployment message
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Starting deployment of customer microservice!"}' https://hooks.slack.com/services/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
+
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -45,8 +49,14 @@ jobs:
       - name: Set build number
         id: build-number
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
+
+      - name: update slack with build about to start message
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"build ${{steps.build-number.outputs.BUILD_NUMBER}} about to start"}' https://hooks.slack.com/services/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
+
       - name: Build Package Push with Maven
         run: mvn -ntp -B verify -Djib.to.auth.password=${{ secrets.DOCKERHUB_ACCESS_TOKEN }} -Djib.to.auth.username=${{secrets.DOCKERHUB_USERNAME}} -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} jib:build -X -e
+
       - name: Update Dockerrun.aws.json api image tag with new build number
         run: |
           echo "Dockerrun.aws.json before updating tag"
@@ -54,6 +64,11 @@ jobs:
           sed -i -E 's_(tommylay1902/amigoscode-api:)([^"]*)_\1'"${{steps.build-number.outputs.BUILD_NUMBER}}"'_' Dockerrun.aws.json
           echo "Dockerrun.aws.json after updating tag"
           cat Dockerrun.aws.json
+
+      - name: update slack with about to deploy message
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"build ${{steps.build-number.outputs.BUILD_NUMBER}} about to deploy to Beanstalk"}' https://hooks.slack.com/services/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
+
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
         with:
@@ -65,6 +80,10 @@ jobs:
           version_description: ${{ github.SHA }}
           region: ${{ secrets.EB_REGION }}
           deployment_package: backend/Dockerrun.aws.json
+      - name: update slack finished deploying message
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"build ${{steps.build-number.outputs.BUILD_NUMBER}} finished deploying"}' https://hooks.slack.com/services/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
+
       - name: Commit and push Dockerrun.aws.json
         run: |
           git config user.name github-actions
