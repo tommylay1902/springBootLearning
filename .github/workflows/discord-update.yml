@@ -11,13 +11,12 @@ jobs:
 
     steps:
       - name: Set commit URL
-        id: commit-url
         run: echo "COMMIT_URL=https://github.com/${{ github.repository }}/commit/${{ github.sha }}" >> $GITHUB_ENV
 
       - name: Send message to Discord
         run: |
           curl -X POST -H "Content-Type: application/json" \
-            -d '{"content":"New push event in the repository!\n\nCommit URL: ${{ steps.commit-url.outputs.COMMIT_URL }}"}' \
+            -d '{"content":"New push event in the repository!\n\nCommit URL: $COMMIT_URL"}' \
             ${{ secrets.DISCORD_WEBHOOK_URL }}
         env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          COMMIT_URL: ${{ steps.send_discord_message.outputs.COMMIT_URL }}
