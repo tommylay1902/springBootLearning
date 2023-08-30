@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Set commit URL
         id: commit-url
-        run: echo "https://github.com/${{ github.repository }}/commit/${{ github.sha }}" >> $GITHUB_ENV
+        run: echo "https://github.com/${{ github.repository }}/commit/${{ github.sha }}" >> $GITHUB_OUTPUT
 
       - name: Send message to Discord
         run: |
