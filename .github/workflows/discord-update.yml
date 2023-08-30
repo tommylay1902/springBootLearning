@@ -25,6 +25,6 @@ jobs:
       - name: Send message to Discord
         run: |
           curl -X POST -H "Content-Type: application/json" \
-            -d '{"content":"New push event in the ${{github.repository}} repository!\n\nCommit Message:${{steps.last-commit.outputs.LAST_COMMIT_MESSAGE}}\n\nCommit URL: ${{ steps.commit-url.outputs.COMMIT_URL }}"}' \
+            -d '{"content":"New push event in the ${{github.repository}} repository!\n\nCommit Message: ${{steps.last-commit.outputs.LAST_COMMIT_MESSAGE}}\n\nCommit URL: ${{ steps.commit-url.outputs.COMMIT_URL }}"}' \
             ${{secrets.DISCORD_WEBHOOK_URL}}
 
