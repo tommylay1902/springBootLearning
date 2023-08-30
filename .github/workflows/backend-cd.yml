@@ -34,7 +34,7 @@ jobs:
 
       - name: update slack with starting deployment message
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Starting deployment of customer microservice!"}'https://hooks.slack.com/services/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
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Starting deployment of customer microservice!"}' https://hooks.slack.com/services/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
 
       - uses: actions/setup-java@v3
         with:
