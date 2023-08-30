@@ -14,9 +14,14 @@ jobs:
         id: commit-url
         run: echo "COMMIT_URL=https://github.com/${{ github.repository }}/commit/${{ github.sha }}" >>  $GITHUB_OUTPUT
 
+      - name: Get last commit message
+        id: last-commit
+        run: |
+          echo "LAST_COMMIT_MESSAGE=(git log -1 --pretty=format:%s)" >> $GITHUB_OUTPUT
+
       - name: Send message to Discord
         run: |
           curl -X POST -H "Content-Type: application/json" \
-            -d '{"content":"New push event in the repository!\\n\\nCommit URL: ${{ steps.commit-url.outputs.COMMIT_URL }}"}' \
+            -d '{"content":"New push event in the ${{github.repository}} repository!\n\nCommit Message:${{steps.last-commit.outputs.LAST_COMMIT_MESSAGE}}\n\nCommit URL: ${{ steps.commit-url.outputs.COMMIT_URL }}"}' \
             ${{secrets.DISCORD_WEBHOOK_URL}}
 
