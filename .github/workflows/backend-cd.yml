@@ -34,7 +34,7 @@ jobs:
 
       - name: update slack with starting deployment message
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Starting deployment of customer microservice!"}' https://hooks.slack.com/services/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
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Starting deployment of customer microservice!"}'https://hooks.slack.com/services/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
 
       - uses: actions/setup-java@v3
         with:
@@ -52,7 +52,7 @@ jobs:
 
       - name: update slack with build about to start message
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"build ${{steps.build-number.outputs.BUILD_NUMBER}} about to start"}' https://hooks.slack.com/services/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
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"build ${{steps.build-number.outputs.BUILD_NUMBER}} about to start"}' https://hooks.slack.com/services/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
 
       - name: Build Package Push with Maven
         run: mvn -ntp -B verify -Djib.to.auth.password=${{ secrets.DOCKERHUB_ACCESS_TOKEN }} -Djib.to.auth.username=${{secrets.DOCKERHUB_USERNAME}} -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} jib:build -X -e
@@ -67,7 +67,7 @@ jobs:
 
       - name: update slack with about to deploy message
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"build ${{steps.build-number.outputs.BUILD_NUMBER}} about to deploy to Beanstalk"}' https://hooks.slack.com/services/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
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"build ${{steps.build-number.outputs.BUILD_NUMBER}} about to deploy to Beanstalk"}' https://hooks.slack.com/services/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
 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
@@ -80,9 +80,10 @@ jobs:
           version_description: ${{ github.SHA }}
           region: ${{ secrets.EB_REGION }}
           deployment_package: backend/Dockerrun.aws.json
+
       - name: update slack finished deploying message
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"build ${{steps.build-number.outputs.BUILD_NUMBER}} finished deploying"}' https://hooks.slack.com/services/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
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"build ${{steps.build-number.outputs.BUILD_NUMBER}} finished deploying"}' https://hooks.slack.com/services/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
 
       - name: Commit and push Dockerrun.aws.json
         run: |
