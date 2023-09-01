@@ -1,8 +1,27 @@
 import { useEffect, useState } from "react"
 import UserProfile from "./UserProfile"
-function App() {
-    let [loading, setLoading] = useState(false)
 
+const UserProfiles = ({users}) => (
+    <div>
+        {users.map((user, index) => (
+            <UserProfile
+                key={index}
+                name={user.name}
+                age={user.age}
+                gender={user.gender}
+                imageNumber={index}
+            />
+        ))}
+    </div>
+)
+
+function App() {
+    const [isLoading, setIsLoading] = useState(false)
+    const [counter, setCounter] = useState(0);
+       // Update the counter when the button is clicked
+    const handleCounterClick = () => {
+        setCounter(counter + 1);
+    }
     const users = [
         {
             name:"jamila",
@@ -21,26 +40,18 @@ function App() {
         },
     ]
     useEffect(() => {
+        
         setTimeout(() => {
-            setLoading(true)
-        }, 5000)
+            setIsLoading(true)
+            alert("loaded");
+        }, 1000)
        
     }, [])
     return <h1>{
-        loading ? 
+        isLoading ? 
         <>
-            {
-                users.map((user, index) => {
-                    return <UserProfile 
-                            name={user.name} 
-                            age={user.age} 
-                            gender={user.gender} 
-                            key={index} 
-                            imageNumber={index}
-                        />
-
-                })
-            }
+            <UserProfiles users={users}/>
+            <button onClick={handleCounterClick}>count: {counter}</button>
         </>
     
         : 
