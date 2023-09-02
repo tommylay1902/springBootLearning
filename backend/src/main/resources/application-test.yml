@@ -9,6 +9,7 @@ spring:
     url: jdbc:postgresql://localhost:5332/customer
     username: amigoscode
     password: password
+    driverClassName: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: validate
