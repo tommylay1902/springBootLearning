@@ -2,6 +2,7 @@
 ARG DATABASE_URL=default-database-url
 ARG DATABASE_USERNAME=default-username
 ARG DATABASE_PASSWORD=default-password
+ARG SPRING_PROFILES_ACTIVE=default-profile
 
 # Use the build arguments to set environment variables
 ENV DATABASE_URL=$DATABASE_URL
