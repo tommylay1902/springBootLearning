@@ -16,7 +16,7 @@ const UserProfiles = ({users}) => (
 )
 
 function App() {
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
     const [counter, setCounter] = useState(0);
        // Update the counter when the button is clicked
     const handleCounterClick = () => {
@@ -40,24 +40,20 @@ function App() {
         },
     ]
     useEffect(() => {
-        
+        setIsLoading(true)
         setTimeout(() => {
-            setIsLoading(true)
-            alert("loaded");
-        }, 1000)
+            setIsLoading(false)
+        }, 2000)
        
     }, [])
-    return <h1>{
-        isLoading ? 
-        <>
-            <UserProfiles users={users}/>
-            <button onClick={handleCounterClick}>count: {counter}</button>
-        </>
-    
-        : 
-        "loading"
+    if(isLoading){
+        return "loading..."
     }
-    </h1>
+    return  (
+    <>
+        <UserProfiles users={users}/>
+        <button onClick={handleCounterClick}>count: {counter}</button>
+    </>)
 }
 
 export default App
