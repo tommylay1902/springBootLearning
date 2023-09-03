@@ -50,8 +50,13 @@ jobs:
         id: build-number
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
 
+      - name: Set Spring Profile
+        run: |
+          echo "spring.profiles.active: prod" >> $GITHUB_WORKSPACE/backend/src/main/resources/application.yml
+        working-directory: $GITHUB_WORKSPACE
+
       - name: Build Package Push with Maven
-        run: mvn -ntp -B verify -Djib.to.auth.password=${{ secrets.DOCKERHUB_ACCESS_TOKEN }} -Djib.to.auth.username=${{secrets.DOCKERHUB_USERNAME}} -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} -Dspring.profiles.active=prod jib:build -X -e
+        run: mvn -ntp -B verify -Djib.to.auth.password=${{ secrets.DOCKERHUB_ACCESS_TOKEN }} -Djib.to.auth.username=${{secrets.DOCKERHUB_USERNAME}} -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} jib:build -X -e
 
 
       - name: Deploy to production
