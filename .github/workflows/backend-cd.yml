@@ -58,6 +58,10 @@ jobs:
 #        run: |
 #          echo "spring.profiles.active: prod" >> src/main/resources/application.yml
 
+      - name: Debug - Show Application.yml After
+        run: cat src/main/resources/application.yml
+
+
       - name: Build Package Push with Maven
         run: mvn -ntp -B verify -Djib.to.auth.password=${{ secrets.DOCKERHUB_ACCESS_TOKEN }} -Djib.to.auth.username=${{secrets.DOCKERHUB_USERNAME}} -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} jib:build -X -e
 
