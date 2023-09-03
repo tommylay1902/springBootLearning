@@ -52,7 +52,6 @@ jobs:
 
       - name: Debug - List Directory Contents
         run: ls -R
-        working-directory: $GITHUB_WORKSPACE/backend
 
       - name: Set Spring Profile
         run: |
