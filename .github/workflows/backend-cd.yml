@@ -50,8 +50,8 @@ jobs:
         id: build-number
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
 
-      - name: Debug - List Directory Contents
-        run: ls -R
+      - name: Debug - Show Application.yml Before
+        run: cat src/main/resources/application.yml
 
       - name: Set Spring Profile
         run: |
