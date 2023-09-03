@@ -56,7 +56,7 @@ jobs:
 
       - name: Set Spring Profile
         run: |
-          echo "spring.profiles.active: prod" >> %GITHUB_WORKSPACE/backend/src/main/resources/application.yml
+          echo "spring.profiles.active: prod" >> src/main/resources/application.yml
           working-directory: $GITHUB_WORKSPACE
 
       - name: Build Package Push with Maven
