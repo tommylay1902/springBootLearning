@@ -50,15 +50,9 @@ jobs:
         id: build-number
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
 
-      - name: Debug
-        run: |
-          pwd
-          ls -R $GITHUB_WORKSPACE
-        working-directory: $GITHUB_WORKSPACE
-
       - name: Set Spring Profile
         run: |
-          echo "spring.profiles.active: prod" >> $GITHUB_WORKSPACE/backend/src/main/resources/application.yml
+          echo "spring.profiles.active: prod" >> /backend/src/main/resources/application.yml
         working-directory: $GITHUB_WORKSPACE
 
 
