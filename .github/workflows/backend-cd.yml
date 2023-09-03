@@ -52,7 +52,7 @@ jobs:
 
       - name: Set Spring Profile
         run: |
-          echo "spring.profiles.active: prod" >> /backend/src/main/resources/application.yml
+          echo "spring.profiles.active: prod" >> backend/src/main/resources/application.yml
 
 
       - name: Build Package Push with Maven
