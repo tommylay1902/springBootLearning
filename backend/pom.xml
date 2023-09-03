@@ -44,7 +44,24 @@
 				<docker.image.tag>latest</docker.image.tag>
 			</properties>
 		</profile>
+		<profile>
+			<id>test</id>
+			<!-- Define other build configurations for the dev profile -->
+			<properties>
+				<spring.profiles.active>test</spring.profiles.active>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>prod</id>
+			<!-- Define other build configurations for the prod profile -->
+			<properties>
+				<spring.profiles.active>prod</spring.profiles.active>
+			</properties>
+		</profile>
 	</profiles>
+
+
 
 	<dependencies>
 		<dependency>
