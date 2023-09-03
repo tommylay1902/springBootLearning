@@ -24,4 +24,4 @@ RUN mvn clean verify -DskipTests -Djib.to.auth.password=${DOCKERHUB_PASSWORD} -D
 FROM openjdk:17.0.1-jdk-slim
 COPY --from=build target/amigoscode-api-1.0-SNAPSHOT.jar amigoscode-api.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "amigoscode-api.jar"]
+ENTRYPOINT ["java", "-jar", "amigoscode-api.jar", "--spring.profiles.active=prod"]
