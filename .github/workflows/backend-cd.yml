@@ -54,11 +54,18 @@ jobs:
         run: mvn -ntp -B verify -Djib.to.auth.password=${{ secrets.DOCKERHUB_ACCESS_TOKEN }} -Djib.to.auth.username=${{secrets.DOCKERHUB_USERNAME}} -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} -Pdev jib:build -X -e
 
 
-      - name: Deploy to production
-        uses: johnbeynon/render-deploy-action@v0.0.8
+
+      - name: Trigger deployment
+        uses: sws2apps/render-deployment@main #consider using pin for dependabot auto update
         with:
-          service-id: ${{ secrets.RENDER_WEBHOOK }} # Can be found as part of the Deploy Hook
-          api-key: ${{ secrets.RENDER_API_KEY }} # Create your API key in Render Dashboard > Account Settings
+          serviceId: ${{ secrets.RENDER_WEBHOOK }}
+          apiKey: ${{ secrets.RENDER_API_KEY }}
+          multipleDeployment: false #optional, default true
+#      - name: Deploy to production
+#        uses: johnbeynon/render-deploy-action@v0.0.8
+#        with:
+#          service-id: ${{ secrets.RENDER_WEBHOOK }} # Can be found as part of the Deploy Hook
+#          api-key: ${{ secrets.RENDER_API_KEY }} # Create your API key in Render Dashboard > Account Settings
 
 #      - name: Update Dockerrun.aws.json api image tag with new build number
 #        run: |
