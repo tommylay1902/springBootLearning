@@ -46,14 +46,13 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
-      - name: Set build number
-        id: build-number
-        run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
 
-      - name: Build Package Push with Maven
-        run: mvn -ntp -B verify -Djib.to.auth.password=${{ secrets.DOCKERHUB_ACCESS_TOKEN }} -Djib.to.auth.username=${{secrets.DOCKERHUB_USERNAME}} -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} -Pdev jib:build -X -e
-
-
+#      - name: Set build number
+#        id: build-number
+#        run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
+#
+#      - name: Build Package Push with Maven
+#        run: mvn -ntp -B verify -Djib.to.auth.password=${{ secrets.DOCKERHUB_ACCESS_TOKEN }} -Djib.to.auth.username=${{secrets.DOCKERHUB_USERNAME}} -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} -Pdev jib:build -X -e
 
       - name: Trigger deployment
         uses: ttskch/render-deploy@v1.0.0
