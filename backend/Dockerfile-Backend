@@ -7,6 +7,8 @@ ARG DATABASE_USERNAME=default-username
 ARG DATABASE_PASSWORD=default-password
 ARG SPRING_PROFILES_ACTIVE=default-profile
 ARG DOCKERHUB_PASSWORD=default-pass
+ARG BUILD_NUMBER=latest
+
 
 # Use the build arguments to set environment variables
 ENV DATABASE_URL=$DATABASE_URL
@@ -14,17 +16,13 @@ ENV DATABASE_USERNAME=$DATABASE_USERNAME
 ENV DATABASE_PASSWORD=$DATABASE_PASSWORD
 ENV SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE
 ENV DOCKERHUB_PASSWORD=$DOCKERHUB_PASSWORD
+ENV BUILD_NUMBER=${BUILD_NUMBER}
 
 
 
 
 COPY . .
-# Create the /app directory and set it as the working directory
-WORKDIR /backend/app
 
-# Create a build number using the date command
-RUN export BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S') && \
-    echo "BUILD_NUMBER=$BUILD_NUMBER" >> build-info.properties
 
 RUN mvn clean verify -DskipTests -Djib.to.auth.password=${DOCKERHUB_PASSWORD} -Djib.to.auth.username=tommylay1902 -Ddocker.image.tag=$BUILD_NUMBER
 
