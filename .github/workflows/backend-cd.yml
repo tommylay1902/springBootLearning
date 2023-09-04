@@ -41,6 +41,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'maven'
+
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -52,7 +53,7 @@ jobs:
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
 
       - name: Build Docker image
-        run: docker build -f Dockerfile-Backend --build-arg BUILD_NUMBER=${{ steps.build-number.outputs.BUILD_NUMBER }} -t -Djib.to.auth.password=${{secrets.DOCKER_HUB_PASSWORD}} -Djib.to.auth.username=tommylay1902 amigoscode-api:latest .
+        run: docker build -f Dockerfile-Backend --build-arg BUILD_NUMBER=${{ steps.build-number.outputs.BUILD_NUMBER }} -t amigoscode-api:latest .
 
       - name: Trigger deployment
         uses: ttskch/render-deploy@v1.0.0
