@@ -1,59 +1,34 @@
 import { useEffect, useState } from "react"
 import UserProfile from "./UserProfile"
+import {Button} from "@chakra-ui/react"
+import SidebarWithHeader from "./SideBar.jsx";
+import {getCustomers} from "./services/client.js";
 
-const UserProfiles = ({users}) => (
-    <div>
-        {users.map((user, index) => (
-            <UserProfile
-                key={index}
-                name={user.name}
-                age={user.age}
-                gender={user.gender}
-                imageNumber={index}
-            />
-        ))}
-    </div>
-)
 
-function App() {
-    const [isLoading, setIsLoading] = useState(true)
-    const [counter, setCounter] = useState(0);
-       // Update the counter when the button is clicked
-    const handleCounterClick = () => {
-        setCounter(counter + 1);
-    }
-    const users = [
-        {
-            name:"jamila",
-            age:22,
-            gender:"female",
-        },
-        {
-            name:"Tommy",
-            age:24,
-            gender:"male",
-        },  
-        {
-            name:"apple cheese",
-            age:30,
-            gender:"male",
-        },
-    ]
+const App =() => {
+    const [count, setCount] = useState(0)
+    const [isLoading, setIsLoading] = useState(true);
+    const [customers, setCustomers] = useState({})
     useEffect(() => {
-        setIsLoading(true)
-        setTimeout(() => {
-            setIsLoading(false)
-        }, 2000)
-       
-    }, [])
-    if(isLoading){
-        return "loading..."
-    }
-    return  (
-    <>
-        <UserProfiles users={users}/>
-        <button onClick={handleCounterClick}>count: {counter}</button>
-    </>)
+        setIsLoading(true);
+        getCustomers()
+                .then(data => {
+                setCustomers(data.data);
+
+            })
+            .catch((e) => console.log(e))
+            .finally(() => setIsLoading(false))
+    }, []);
+
+    return (
+       <>
+        <SidebarWithHeader>
+            {isLoading ? <p>"is loading..."</p>: customers.map(customer => <p id={customer.id}>{customer.name}</p>)}
+            <Button onClick={() => setCount(count+1)} colorScheme={"blue"} variant={"outline"}>Click me</Button>
+        </SidebarWithHeader>
+       </>
+
+    )
 }
 
 export default App
