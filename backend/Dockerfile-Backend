@@ -19,11 +19,14 @@ ENV DOCKERHUB_PASSWORD=$DOCKERHUB_PASSWORD
 
 
 COPY . .
+# Create the /app directory and set it as the working directory
+WORKDIR /app
+
 # Create a build number using the date command
 RUN export BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S') && \
-    echo "BUILD_NUMBER=$BUILD_NUMBER" >> /app/build-info.properties
+    echo "BUILD_NUMBER=$BUILD_NUMBER" >> build-info.properties
 
-RUN mvn clean verify -DskipTests -Djib.to.auth.password=${DOCKERHUB_PASSWORD} -Djib.to.auth.username=tommylay1902 -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}}
+RUN mvn clean verify -DskipTests -Djib.to.auth.password=${DOCKERHUB_PASSWORD} -Djib.to.auth.username=tommylay1902 -Ddocker.image.tag=$BUILD_NUMBER
 
 FROM openjdk:17.0.1-jdk-slim
 COPY --from=build target/amigoscode-api-1.0-SNAPSHOT.jar amigoscode-api.jar
