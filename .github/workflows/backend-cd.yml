@@ -53,7 +53,7 @@ jobs:
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
 
       - name: Build Docker image
-        run: mvn clean verify -DskipTests -Djib.to.auth.password=${{secrets.DOCKERHUB_PASSWORD}} -Djib.to.auth.username=${{secrets.DOCKERHUB_USERNAME}} -Ddocker.image.tag=$BUILD_NUMBER -Pdev jib:build -X -e
+        run: mvn clean verify -DskipTests -Djib.to.auth.password=${{secrets.DOCKERHUB_PASSWORD}} -Djib.to.auth.username=${{secrets.DOCKERHUB_USERNAME}} -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} -Pdev jib:build -X -e
 
       - name: Trigger deployment
         uses: ttskch/render-deploy@v1.0.0
