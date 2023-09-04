@@ -52,7 +52,7 @@ jobs:
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
 
       - name: Build Docker image
-        run: docker build -f Dockerfile-backend --build-arg BUILD_NUMBER=${{ steps.build-number.outputs.BUILD_NUMBER }} -t amigoscode-api:latest .
+        run: docker build -f Dockerfile-Backend --build-arg BUILD_NUMBER=${{ steps.build-number.outputs.BUILD_NUMBER }} -t amigoscode-api:latest .
 
       - name: Trigger deployment
         uses: ttskch/render-deploy@v1.0.0
