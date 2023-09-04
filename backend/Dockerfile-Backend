@@ -20,7 +20,7 @@ ENV DOCKERHUB_PASSWORD=$DOCKERHUB_PASSWORD
 
 COPY . .
 # Create the /app directory and set it as the working directory
-WORKDIR /app
+WORKDIR /backend/app
 
 # Create a build number using the date command
 RUN export BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S') && \
