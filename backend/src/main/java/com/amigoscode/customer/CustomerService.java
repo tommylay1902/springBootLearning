@@ -33,7 +33,8 @@ public class CustomerService {
         customerDAO.insertCustomer(new Customer(
                 customerRegistrationRequest.name(),
                 customerRegistrationRequest.email(),
-                customerRegistrationRequest.age()
+                customerRegistrationRequest.age(),
+                customerRegistrationRequest.gender()
         ));
     }
 
@@ -72,10 +73,18 @@ public class CustomerService {
             customerToUpdate.setAge(customerUpdateRequest.age());
             changes=true;
         }
+
+        if(
+                customerUpdateRequest.gender() != null
+                && !customerUpdateRequest.gender().equals(customerToUpdate.getGender())
+        ){
+
+            customerToUpdate.setGender(Customer.Gender.fromValue(customerUpdateRequest.gender()));
+            changes = true;
+        }
         if(!changes){
             throw new RequestValidationException("No changes found");
         }
         customerDAO.updateCustomer(customerToUpdate);
-
     }
 }

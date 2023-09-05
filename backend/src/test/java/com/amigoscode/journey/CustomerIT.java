@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
+import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -34,10 +36,13 @@ public class CustomerIT {
 
         String name = fakerName.fullName();
         String email = fakerName.firstName() + UUID.randomUUID() + "@gmail.com";
+        Random random = new Random();
+        Customer.Gender randomGender = Customer.Gender.values()[random.nextInt(Customer.Gender.values().length)];
+
 
         int age = RANDOM.nextInt(1,100);
 
-        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, age);
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, age, randomGender.getValue());
         //send a post request
         //    NEVER DO THIS!!! We never want to invoke the method directly from the controller
         //    @Autowired
@@ -46,8 +51,7 @@ public class CustomerIT {
         webTestClient.post().uri(baseURI)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(Mono.just(request), CustomerRegistrationRequest.class)
-                //.exchange is sending the request
+                .body(Mono.just(request), CustomerRegistrationRequest.class)                //.exchange is sending the request
                 .exchange()
                 .expectStatus()
                 .is2xxSuccessful();
@@ -61,7 +65,7 @@ public class CustomerIT {
                 .returnResult()
                 .getResponseBody();
 
-        Customer expectedCustomer = new Customer( name, email, age);
+        Customer expectedCustomer = new Customer( name, email, age, randomGender.getValue());
         //make sure that customer is present
         assertThat(customers)
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
@@ -95,9 +99,9 @@ public class CustomerIT {
         String email = fakerName.firstName() + UUID.randomUUID() + "@gmail.com";
 
         int age = RANDOM.nextInt(1,100);
+        String gender = "Male";
 
-
-        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, age);
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, age, gender);
         //send a post request
         webTestClient.post().uri(baseURI)
                 .accept(MediaType.APPLICATION_JSON)
@@ -148,8 +152,11 @@ public class CustomerIT {
 
         int age = RANDOM.nextInt(1,100);
 
+        Customer.Gender gender = Customer.Gender.MALE;
 
-        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, age);
+
+
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, age, "Male");
         //send a post updateRequest
         webTestClient.post().uri(baseURI)
                 .accept(MediaType.APPLICATION_JSON)
@@ -184,8 +191,10 @@ public class CustomerIT {
         String nameUpdate = fakerNameUpdate.fullName();
         String emailUpdate = fakerNameUpdate.firstName() + UUID.randomUUID() + "@gmail.com";
         int ageUpdate = RANDOM.nextInt(1,100);
+        String genderUpdate = "Female";
 
-        CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(nameUpdate, emailUpdate,  ageUpdate);
+
+        CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(nameUpdate, emailUpdate,  ageUpdate, genderUpdate);
 
         webTestClient.put().uri(baseURI + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
@@ -206,7 +215,7 @@ public class CustomerIT {
                 .getResponseBody();
 
 
-        Customer expected = new Customer(id, nameUpdate, emailUpdate, ageUpdate);
+        Customer expected = new Customer(id, nameUpdate, emailUpdate, ageUpdate, genderUpdate);
 
         //test updateRequest to actual
         assertThat(actual).usingRecursiveComparison().ignoringFields("id").isEqualTo(expected);

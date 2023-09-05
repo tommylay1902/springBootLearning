@@ -27,12 +27,16 @@ public class Main {
         Faker faker = new Faker();
         String nameOne = faker.name().fullName();
         String nameTwo = faker.name().fullName();
+        Customer.Gender gender = Customer.Gender.MALE;
 
         Random r = new Random();
 
+        Customer.Gender randomGender = Customer.Gender.values()[r.nextInt(Customer.Gender.values().length)];
+
+
         return args -> {
-            Customer customer1 = new Customer( nameOne, faker.internet().emailAddress(), r.nextInt(16, 29));
-            Customer customer2 = new Customer( nameTwo,  faker.internet().emailAddress(), r.nextInt(16, 29));
+            Customer customer1 = new Customer( nameOne, faker.internet().emailAddress(), r.nextInt(16, 29), randomGender.getValue());
+            Customer customer2 = new Customer( nameTwo,  faker.internet().emailAddress(), r.nextInt(16, 29), randomGender.getValue());
             List<Customer> customers = List.of(customer1, customer2);
 
             customerRepository.saveAll(customers);

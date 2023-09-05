@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,11 +29,15 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
 
     @Test
     void selectAllCustomer() {
+        Random random = new Random();
+        Customer.Gender randomGender = Customer.Gender.values()[random.nextInt(Customer.Gender.values().length)];
+
         //given
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 FAKER.internet().safeEmailAddress() + "-"+ UUID.randomUUID(),
-                20
+                20,
+                randomGender.getValue()
         );
         underTest.insertCustomer(customer);
 
@@ -45,13 +50,16 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
 
     @Test
     void selectCustomerById() {
+        Random random = new Random();
+        Customer.Gender randomGender = Customer.Gender.values()[random.nextInt(Customer.Gender.values().length)];
 
         //given
         String email = FAKER.internet().safeEmailAddress() + "-"+ UUID.randomUUID();
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 email,
-                20
+                20,
+                randomGender.getValue()
         );
 
         underTest.insertCustomer(customer);
@@ -70,7 +78,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
             assertThat(c.getName()).isEqualTo(customer.getName());
             assertThat(c.getEmail()).isEqualTo(customer.getEmail());
             assertThat(c.getAge()).isEqualTo(customer.getAge());
-
+            assertThat(c.getGender()).isEqualTo(customer.getGender());
         });
     }
 
@@ -90,12 +98,16 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
 
     @Test
     void existsPersonWithEmail() {
+        Random random = new Random();
+        Customer.Gender randomGender = Customer.Gender.values()[random.nextInt(Customer.Gender.values().length)];
+
         //given
         String email = FAKER.internet().safeEmailAddress() + "-"+ UUID.randomUUID();
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 email,
-                20
+                20,
+                randomGender.getValue()
         );
 
         underTest.insertCustomer(customer);
@@ -110,11 +122,15 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     @Test
     void willReturnFalseExistsPersonWithEmail(){
         //given
+        Random random = new Random();
+        Customer.Gender randomGender = Customer.Gender.values()[random.nextInt(Customer.Gender.values().length)];
+
         String email = FAKER.internet().safeEmailAddress() + "-"+ UUID.randomUUID();
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 email,
-                20
+                20,
+                randomGender.getValue()
         );
 
         underTest.insertCustomer(customer);
@@ -132,11 +148,15 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     @Test
     void existsPersonWithId() {
         //given
+        Random random = new Random();
+        Customer.Gender randomGender = Customer.Gender.values()[random.nextInt(Customer.Gender.values().length)];
+
         String email = FAKER.internet().safeEmailAddress() + "-"+ UUID.randomUUID();
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 email,
-                20
+                20,
+                randomGender.getValue()
         );
         underTest.insertCustomer(customer);
         Long id = underTest.selectAllCustomer()
@@ -168,11 +188,15 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     @Test
     void deleteCustomerWithId() {
         //given
+        Random random = new Random();
+        Customer.Gender randomGender = Customer.Gender.values()[random.nextInt(Customer.Gender.values().length)];
+
         String email = FAKER.internet().safeEmailAddress() + "-"+ UUID.randomUUID();
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 email,
-                20
+                20,
+                randomGender.getValue()
         );
         underTest.insertCustomer(customer);
         Long id = underTest.selectAllCustomer()
@@ -192,11 +216,14 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     @Test
     void updateCustomer() {
         //given
+        Customer.Gender gender = Customer.Gender.MALE;
+
         String email = FAKER.internet().safeEmailAddress() + "-"+ UUID.randomUUID();
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 email,
-                20
+                20,
+                gender.getValue()
         );
 
         underTest.insertCustomer(customer);
@@ -213,7 +240,9 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
         String emailUpdate = FAKER.internet().safeEmailAddress() + "-"+ UUID.randomUUID();
         String nameUpdate = "Tommy Tommerton";
         int age = 10;
-        Customer update = new Customer(id, emailUpdate, nameUpdate, age);
+        Customer.Gender genderUpdate = Customer.Gender.FEMALE;
+
+        Customer update = new Customer(id, emailUpdate, nameUpdate, age, genderUpdate.getValue());
 
         underTest.updateCustomer(update);
 

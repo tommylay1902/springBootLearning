@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.Random;
 import java.util.UUID;
 
 import static com.amigoscode.AbstractTestcontainers.FAKER;
@@ -29,11 +30,15 @@ class CustomerRepositoryTest {
     @Test
     void existsCustomerByEmail() {
         // Given
+        Random random = new Random();
+        Customer.Gender randomGender = Customer.Gender.values()[random.nextInt(Customer.Gender.values().length)];
+
         String email = FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID();
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 email,
-                20
+                20,
+                randomGender.getValue()
         );
 
         underTest.save(customer);
