@@ -17,6 +17,7 @@ const App =() => {
                 .then(data => {
                     setCustomers(data.data);
 
+
                 })
                 .catch((e) => console.log(e))
                 .finally(() => setIsLoading(false))
@@ -59,7 +60,6 @@ const App =() => {
                             )
                         )
                 }
-                <Button onClick={() => setCount(count+1)} colorScheme={"blue"} variant={"outline"}>Click me</Button>
                 </Wrap>
             </SidebarWithHeader>
         )

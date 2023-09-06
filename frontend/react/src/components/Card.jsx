@@ -12,7 +12,7 @@ import {
     useColorModeValue,
 } from '@chakra-ui/react';
 
-export default function CardWithImage({id, name, email, age}) {
+export default function CardWithImage({id, name, email, age, gender}) {
     return (
         <Center py={6}>
             <Box
@@ -51,6 +51,7 @@ export default function CardWithImage({id, name, email, age}) {
                         </Heading>
                         <Text color={'gray.500'}>{email}</Text>
                         <Text color={'gray.500'}>Age {age}</Text>
+                        <Text color={'gray.500'}>Gender {gender}</Text>
                     </Stack>
                 </Box>
             </Box>
