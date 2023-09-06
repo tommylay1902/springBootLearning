@@ -1,5 +1,6 @@
 package com.amigoscode.customer;
 
+import com.amigoscode.Main;
 import com.amigoscode.exception.DuplicateResourceException;
 import com.amigoscode.exception.RequestValidationException;
 import com.amigoscode.exception.ResourceNotFoundException;
@@ -8,11 +9,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 public class CustomerService {
 
     private final CustomerDAO customerDAO;
+    private static final Logger LOGGER = Logger.getLogger(CustomerService.class.getName());
 
     public CustomerService(@Qualifier("jdbc") CustomerDAO customerDAO) {
         this.customerDAO = customerDAO;
@@ -30,12 +33,21 @@ public class CustomerService {
         if(customerDAO.existsPersonWithEmail(customerRegistrationRequest.email())){
             throw new DuplicateResourceException("Email already exists");
         }
-        customerDAO.insertCustomer(new Customer(
+        if(customerRegistrationRequest.gender().isEmpty()){
+            throw new RequestValidationException("Please specify 'Male', 'Female' or 'Other' for your gender");
+        }
+
+        Customer customerToInsert = new Customer(
                 customerRegistrationRequest.name(),
                 customerRegistrationRequest.email(),
                 customerRegistrationRequest.age(),
                 customerRegistrationRequest.gender()
-        ));
+        );
+
+        LOGGER.info(customerToInsert.toString());
+
+
+        customerDAO.insertCustomer(customerToInsert);
     }
 
     public void deleteCustomer(Long id) {

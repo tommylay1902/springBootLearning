@@ -1,5 +1,6 @@
 package com.amigoscode.customer;
 
+import com.amigoscode.exception.RequestValidationException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.*;
@@ -35,7 +36,7 @@ public class Customer {
                     return gender;
                 }
             }
-            throw new IllegalArgumentException("Invalid gender value: " + value);
+            throw new RequestValidationException("Please choose between 'Male', 'Female' or 'Other'. Gender: '" + value + "' is invalid");
         }
 
         @JsonValue
@@ -69,6 +70,8 @@ public class Customer {
     @Column(nullable = false)
     private Integer age;
 
+
+    @Column(nullable=false)
     @Enumerated(EnumType.STRING)
     private Gender gender;
 

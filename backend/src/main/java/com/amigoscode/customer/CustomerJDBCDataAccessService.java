@@ -40,6 +40,7 @@ public class CustomerJDBCDataAccessService implements CustomerDAO{
 
     @Override
     public void insertCustomer(Customer customer) {
+
         var sql = """
                 INSERT INTO customer(name, email, age, gender)
                 VALUES(?,?,?,?);
