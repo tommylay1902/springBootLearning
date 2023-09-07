@@ -4,6 +4,7 @@ import {Button, Spinner, Textarea, Wrap, WrapItem} from "@chakra-ui/react"
 import SidebarWithHeader from "./components/shared/SideBar.jsx";
 import {getCustomers} from "./services/client.js";
 import CardWithImage from "./components/Card.jsx";
+import {DrawerForm} from "./components/DrawerForm.jsx";
 
 
 const App =() => {
@@ -49,6 +50,7 @@ const App =() => {
 
         return (
             <SidebarWithHeader>
+                <DrawerForm/>
                 <Wrap justify={"center"} spacing={"30px"}>
                 {
                     customers.map(

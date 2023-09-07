@@ -40,7 +40,6 @@ public class Main {
             Customer customer2 = new Customer( nameTwo,  faker.internet().emailAddress(), r.nextInt(16, 29), randomGender.getValue());
             List<Customer> customers = List.of(customer1, customer2);
             customerRepository.saveAll(customers);
-
         };
 
 
