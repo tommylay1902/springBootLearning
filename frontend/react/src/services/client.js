@@ -9,7 +9,7 @@ export const getCustomers = async () => {
     }
 }
 
-export const saveCustomer = async (id, update) => {
+export const saveCustomer = async ( update) => {
     try {
         return await axios.post(
             `${import.meta.env.VITE_API_BASE_URL}/api/v1/customers`,
