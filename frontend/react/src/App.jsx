@@ -11,7 +11,8 @@ const App =() => {
     const [count, setCount] = useState(0)
     const [isLoading, setIsLoading] = useState(true);
     const [customers, setCustomers] = useState({})
-    useEffect(() => {
+
+    const fetchCustomers = async () =>{
         setIsLoading(true);
         setTimeout(() => {
             getCustomers()
@@ -23,7 +24,9 @@ const App =() => {
                 .catch((e) => console.log(e))
                 .finally(() => setIsLoading(false))
         }, 2000)
-
+    }
+    useEffect(() => {
+        fetchCustomers()
     }, []);
 
         if(isLoading){
@@ -50,7 +53,7 @@ const App =() => {
 
         return (
             <SidebarWithHeader>
-                <DrawerForm/>
+                <DrawerForm fetchCustomers={fetchCustomers}/>
                 <Wrap justify={"center"} spacing={"30px"}>
                 {
                     customers.map(
