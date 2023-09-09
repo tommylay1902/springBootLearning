@@ -60,7 +60,7 @@ const App =() => {
                         (customer, index) =>
                             (
                             <WrapItem key={index}>
-                                <CardWithImage {...customer}/>
+                                <CardWithImage {...customer} fetchCustomers={fetchCustomers}/>
                             </WrapItem>
                             )
                         )

@@ -10,9 +10,37 @@ import {
     Stack,
     Tag,
     useColorModeValue,
+    Button,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalCloseButton,
+    ModalBody,
+    ModalFooter,
+    useDisclosure,
 } from '@chakra-ui/react';
+import * as PropTypes from "prop-types";
+import {deleteCustomerWithId} from "../services/client.js";
+import {successNotification, errorNotification} from "../services/notification.js";
 
-export default function CardWithImage({id, name, email, age, gender}) {
+export default function CardWithImage({id, name, email, age, gender, fetchCustomers}) {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const deleteCustomer = async (id) => {
+        deleteCustomerWithId(id)
+            .then( res => {
+                successNotification("Success!", "Successfully deleted customer");
+                fetchCustomers();
+            }
+            )
+            .catch(e => {
+                errorNotification(
+                    e.code,
+                    e.response.data.message
+                )
+            })
+            .finally();
+    }
     return (
         <Center py={6}>
             <Box
@@ -52,9 +80,28 @@ export default function CardWithImage({id, name, email, age, gender}) {
                         <Text color={'gray.500'}>{email}</Text>
                         <Text color={'gray.500'}>Age {age}</Text>
                         <Text color={'gray.500'}>Gender {gender}</Text>
+                        <Button colorScheme={"red"} onClick={onOpen} >Delete</Button>
                     </Stack>
                 </Box>
             </Box>
+
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Delete a customer</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        Are you sure you want to delete a customer?
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button colorScheme='red' mr={3} onClick={() => deleteCustomer(id)}>
+                            Delete Customer
+                        </Button>
+                        <Button variant='ghost'>Cancel</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </Center>
     );
 }
