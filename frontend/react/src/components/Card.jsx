@@ -98,7 +98,7 @@ export default function CardWithImage({id, name, email, age, gender, fetchCustom
                         <Button colorScheme='red' mr={3} onClick={() => deleteCustomer(id)}>
                             Delete Customer
                         </Button>
-                        <Button variant='ghost'>Cancel</Button>
+                        <Button variant='ghost' onClick={onClose}>Cancel</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
