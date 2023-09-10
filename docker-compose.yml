@@ -25,6 +25,17 @@ services:
     depends_on:
       - db
     restart: unless-stopped
+  amigoscode-react:
+    container_name: amigoscode-react
+    image: tommylay1902/amigoscode-react
+    build:
+      context: frontend/react
+    ports:
+      - "3000:5173"
+    depends_on:
+      - amigoscode-api
+    restart:
+      unless-stopped
 
 networks:
   db:
