@@ -63,7 +63,7 @@ const CreateCustomerForm = ({ fetchCustomers }) => {
                         .required('Required'),
                     gender: Yup.string()
                         .oneOf(
-                            ['MALE', 'FEMALE'],
+                            ['MALE', 'FEMALE', 'OTHER'],
                             'Invalid gender'
                         )
                         .required('Required'),
@@ -118,6 +118,7 @@ const CreateCustomerForm = ({ fetchCustomers }) => {
                                 <option value="">Select gender</option>
                                 <option value="MALE">Male</option>
                                 <option value="FEMALE">Female</option>
+                                <option value="OTHER">other</option>
                             </MySelect>
 
                             <Button disabled={!isValid || isSubmitting} type="submit">Submit</Button>
