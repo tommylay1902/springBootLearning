@@ -9,6 +9,7 @@ import {
     Input, useDisclosure
 } from "@chakra-ui/react"
 import CreateCustomerForm from "./CreateCustomerForm.jsx";
+import React from "react";
 
 const AddIcon = () => "+"
 
