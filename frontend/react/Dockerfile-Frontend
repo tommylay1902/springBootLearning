@@ -2,7 +2,7 @@ FROM node:19-alpine as build
 ## Set default values for build arguments
 #ARG api_base_url
 
-ENV api_base_url="http://localhost:8088"
+ENV api_base_url=${api_base_url:-http://localhost:8088}
 
 #ENV API_BASE_URL = $API_BASE_URL
 WORKDIR /app
