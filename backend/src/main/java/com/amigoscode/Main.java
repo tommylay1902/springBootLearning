@@ -7,23 +7,29 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 
 @SpringBootApplication
-
+@EnableScheduling
 public class Main {
 
     private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
+    private final RestTemplate restTemplate;
+
+    public Main(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
-
-
     }
-
     @Bean
     CommandLineRunner runner(CustomerRepository customerRepository){
         Faker faker = new Faker();

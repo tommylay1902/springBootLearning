@@ -19,3 +19,10 @@ spring:
     show-sql: true
   main:
     web-application-type: servlet
+
+custom:
+  api:
+    base:
+      uri:
+        frontend: https://amigoscode-react.onrender.com
+        backend: https://amigoscode-learning.onrender.com

@@ -20,3 +20,9 @@ spring:
     show-sql: true
   main:
     web-application-type: servlet
+custom:
+  api:
+    base:
+      uri:
+        frontend: http://localhost:3000
+        backend: http://localhost:8088
