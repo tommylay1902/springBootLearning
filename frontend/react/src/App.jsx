@@ -12,7 +12,7 @@ import React from "react";
 const App =() => {
     const [count, setCount] = useState(0)
     const [isLoading, setIsLoading] = useState(true);
-    const [customers, setCustomers] = useState({})
+    const [customers, setCustomers] = useState([])
 
     const fetchCustomers = async () =>{
         setIsLoading(true);
@@ -28,7 +28,7 @@ const App =() => {
         }, 2000)
     }
     useEffect(() => {
-        fetchCustomers()
+        fetchCustomers().then(r => console.log("done"))
     }, []);
 
         if(isLoading){
@@ -39,7 +39,6 @@ const App =() => {
             )
         }
 
-        // @ts-ignore
         if(customers.length <= 0){
             return (
                 <SidebarWithHeader>
@@ -59,7 +58,6 @@ const App =() => {
                 <DrawerForm fetchCustomers={fetchCustomers}/>
                 <Wrap justify={"center"} spacing={"30px"}>
                 {
-                    // @ts-ignore
                     customers.map(
                         (customer, index) =>
                             (

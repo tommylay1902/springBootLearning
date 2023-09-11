@@ -13,11 +13,14 @@ services:
     networks:
       - db
     restart: unless-stopped
+
   amigoscode-api:
     container_name: amigoscode-api
     image: tommylay1902/amigoscode-api
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/customer
+      DATABASE_USERNAME: amigoscode
+      DATABASE_PASSWORD: password
     ports:
       - "8088:8080"
     networks:
@@ -25,11 +28,14 @@ services:
     depends_on:
       - db
     restart: unless-stopped
+
   amigoscode-react:
     container_name: amigoscode-react
     image: tommylay1902/amigoscode-react
     build:
       context: frontend/react
+      args:
+        api_base_url: http://localhost:8088
     ports:
       - "3000:5173"
     depends_on:

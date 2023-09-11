@@ -2,16 +2,16 @@
 FROM maven:3.8.2-eclipse-temurin-17 AS build
 
 # Set default values for build arguments
-ARG DATABASE_URL=default-database-url
+ARG SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/customer
 ARG DATABASE_USERNAME=default-username
 ARG DATABASE_PASSWORD=default-password
-ARG SPRING_PROFILES_ACTIVE=default-profile
+ARG SPRING_PROFILES_ACTIVE=dev
 ARG DOCKERHUB_PASSWORD=default-pass
 ARG BUILD_NUMBER=latest
 
 
 # Use the build arguments to set environment variables
-ENV DATABASE_URL=$DATABASE_URL
+ENV SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL
 ENV DATABASE_USERNAME=$DATABASE_USERNAME
 ENV DATABASE_PASSWORD=$DATABASE_PASSWORD
 ENV SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE
@@ -20,7 +20,7 @@ ENV BUILD_NUMBER=$BUILD_NUMBER
 
 COPY . .
 
-RUN mvn clean verify -DskipTests -Djib.to.auth.password=$DOCKERHUB_PASSWORD -Djib.to.auth.username=tommylay1902 -Pprod -Ddocker.image.tag=$BUILD_NUMBER
+RUN mvn clean install -DskipTests -DskipITs -Djib.to.auth.password=$DOCKERHUB_PASSWORD -Djib.to.auth.username=tommylay1902 -Pprod -Ddocker.image.tag=$BUILD_NUMBER -X
 
 FROM openjdk:17.0.1-jdk-slim
 COPY --from=build target/amigoscode-api-1.0-SNAPSHOT.jar amigoscode-api.jar
