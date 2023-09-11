@@ -16,19 +16,18 @@ const App =() => {
 
     const fetchCustomers = async () =>{
         setIsLoading(true);
-        setTimeout(() => {
-            getCustomers()
-                .then(data => {
-                    setCustomers(data.data);
+        getCustomers()
+            .then(data => {
+                setCustomers(data.data);
 
 
-                })
-                .catch((e) => console.log(e))
-                .finally(() => setIsLoading(false))
-        }, 2000)
-    }
+            })
+            .catch((e) => console.log(e))
+            .finally(() => setIsLoading(false))
+        }
+
     useEffect(() => {
-        fetchCustomers().then(r => console.log("done"))
+        fetchCustomers().then(r => console.log("fetched customers"))
     }, []);
 
         if(isLoading){
