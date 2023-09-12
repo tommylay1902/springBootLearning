@@ -35,4 +35,10 @@ jobs:
             TAG=${{ steps.build-number.outputs.BUILD_NUMBER }} \
             ../../.ci/build-publish.sh .
 
+      - name: Trigger deployment
+        uses: ttskch/render-deploy@v1.0.0
+        with:
+          api-key: ${{ secrets.RENDER_API_KEY }}
+          service-id: ${{ secrets.RENDER_SERVICE_ID }}
+          interval: 120
 

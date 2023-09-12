@@ -120,7 +120,7 @@ const CreateCustomerForm = ({ fetchCustomers }) => {
                                 <option value="">Select gender</option>
                                 <option value="MALE">Male</option>
                                 <option value="FEMALE">Female</option>
-                                <option value="OTHER">other</option>
+                                <option value="OTHER">Other</option>
                             </MySelect>
 
                             <Button disabled={!isValid || isSubmitting} type="submit">Submit</Button>
