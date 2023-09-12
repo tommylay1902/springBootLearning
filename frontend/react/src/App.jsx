@@ -19,8 +19,6 @@ const App =() => {
         getCustomers()
             .then(data => {
                 setCustomers(data.data);
-
-
             })
             .catch((e) => console.log(e))
             .finally(() => setIsLoading(false))
