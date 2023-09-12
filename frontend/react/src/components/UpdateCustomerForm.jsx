@@ -113,7 +113,6 @@ export const UpdateCustomerForm = ({id, name, email, age, gender, fetchCustomers
                             <option value="FEMALE">Female</option>
                             <option value="OTHER">Other</option>
                         </MySelect>
-    
                         <Button disabled={!isValid || isSubmitting} type="submit" colorScheme='teal'>Submit</Button>
                     </Stack>
                 </Form>
