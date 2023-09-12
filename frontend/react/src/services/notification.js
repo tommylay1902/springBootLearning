@@ -7,7 +7,7 @@ const notification = (title, description, status) => {
         description,
         status,
         isClosable:true,
-        duration:4000
+        duration:5000
     })
 }
 
