@@ -54,7 +54,7 @@ const CreateCustomerForm = ({ fetchCustomers }) => {
                 }}
                 validationSchema={Yup.object({
                     name: Yup.string()
-                        .max(15, 'Must be 15 characters or less')
+                        .max(25, 'Must be 25 characters or less')
                         .required('Required'),
                     age: Yup.number()
                         .min(16, 'Must be at least 16 years of age')
