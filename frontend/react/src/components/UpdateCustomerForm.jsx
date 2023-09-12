@@ -61,7 +61,7 @@ export const UpdateCustomerForm = ({id, name, email, age, gender, fetchCustomers
                     .max(100, 'Must be less than 100 years of age')
                     .required(),
                 email: Yup.string()
-                    .email('Must be 20 characters or less')
+                    .email('Must be 25 characters or less')
                     .required('Required'),
                 gender: Yup.string()
                     .oneOf(
