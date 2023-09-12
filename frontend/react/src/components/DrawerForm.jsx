@@ -27,7 +27,7 @@ export const DrawerForm = ({fetchCustomers}) => {
             <Drawer isOpen={isOpen} onClose={onClose} size={"xl"}>
                 <DrawerOverlay />
                 <DrawerContent>
-                    <DrawerCloseButton />
+                    <DrawerCloseButton/>
                     <DrawerHeader>Create your account</DrawerHeader>
 
                     <DrawerBody>
