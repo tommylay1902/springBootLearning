@@ -28,6 +28,7 @@ export const DrawerForm = ({fetchCustomers}) => {
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerCloseButton/>
+
                     <DrawerHeader>Create your account</DrawerHeader>
 
                     <DrawerBody>

@@ -38,7 +38,7 @@ jobs:
       - name: Trigger deployment
         uses: ttskch/render-deploy@v1.0.0
         with:
-          api-key: ${{ secrets.RENDER_API_KEY }}
+          api-key: ${{ secrets.RENDER_API_KEY_FRONTEND }}
           service-id: ${{ secrets.RENDER_SERVICE_ID_FRONTEND }}
           interval: 120
 
