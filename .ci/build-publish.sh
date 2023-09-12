@@ -2,6 +2,9 @@
 : "${REPO:?REPO not set or empty}"
 : "${TAG:?TAG not set or empty}"
 
+# Set the path to your custom Dockerfile
+DOCKERFILE="Dockerfile-Frontend"
+
 docker buildx create --use
 
 docker buildx build \

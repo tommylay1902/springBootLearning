@@ -36,7 +36,7 @@ export const DrawerForm = ({fetchCustomers}) => {
 
                     <DrawerFooter>
                         <Button type='submit' form='my-form'>
-                            Save
+                            Create
                         </Button>
                     </DrawerFooter>
                 </DrawerContent>
