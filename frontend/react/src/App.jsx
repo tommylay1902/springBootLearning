@@ -27,7 +27,7 @@ const App =() => {
         }
 
     useEffect(() => {
-        fetchCustomers().then(r => console.log("fetched customers"))
+        fetchCustomers().then(r => console.log("fetched the customers"))
     }, []);
 
         if(isLoading){
