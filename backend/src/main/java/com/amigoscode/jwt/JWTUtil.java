@@ -19,7 +19,6 @@ public class JWTUtil {
             String subject,
             Map<String, Object> claims
     ){
-
         return Jwts
                 .builder()
                 .setClaims(claims)
@@ -29,6 +28,7 @@ public class JWTUtil {
                 .setExpiration(Date.from(Instant.now().plus(15, ChronoUnit.DAYS)))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
+
     }
 
     public String issueToken(
