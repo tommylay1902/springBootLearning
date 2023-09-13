@@ -1,8 +1,6 @@
 package com.amigoscode.customer;
 
-import com.amigoscode.exception.ResourceNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,7 +18,7 @@ public class CustomerJDBCDataAccessService implements CustomerDAO{
 
     @Override
     public List<Customer> selectAllCustomer() {
-        var sql = "SELECT id, name, email, age, gender FROM customer;";
+        var sql = "SELECT id, name, email, password, age, gender FROM customer;";
 
 
         return jdbcTemplate.query(sql, customerRowMapper);
@@ -29,7 +27,7 @@ public class CustomerJDBCDataAccessService implements CustomerDAO{
     @Override
     public Optional<Customer> selectCustomerById(Long id) {
         var sql = """
-                       SELECT id, name, email, age, gender
+                       SELECT id, name, email, password,  age, gender
                        FROM customer
                        WHERE id = ?;
                    """;
@@ -42,13 +40,14 @@ public class CustomerJDBCDataAccessService implements CustomerDAO{
     public void insertCustomer(Customer customer) {
 
         var sql = """
-                INSERT INTO customer(name, email, age, gender)
-                VALUES(?,?,?,?);
+                INSERT INTO customer(name, email, password, age, gender)
+                VALUES(?,?,?,?,?);
                 """;
         jdbcTemplate.update(
                 sql,
                 customer.getName(),
                 customer.getEmail(),
+                customer.getPassword(),
                 customer.getAge(),
                 customer.getGender()
         );
@@ -94,6 +93,7 @@ public class CustomerJDBCDataAccessService implements CustomerDAO{
                     SET
                         age = ?,
                         email = ?,
+                        password = ?,
                         name = ?,
                         id = ?,
                         gender = ?
@@ -104,10 +104,23 @@ public class CustomerJDBCDataAccessService implements CustomerDAO{
                 sql,
                 customer.getAge(),
                 customer.getEmail(),
+                customer.getPassword(),
                 customer.getName(),
                 customer.getId(),
                 customer.getGender(),
                 customer.getId()
         );
+    }
+
+    @Override
+    public Optional<Customer> selectUserByEmail(String email) {
+        var sql = """
+                       SELECT id, name, email, password, age, gender
+                       FROM customer
+                       WHERE email = ?;
+                   """;
+
+        return jdbcTemplate.query(sql, customerRowMapper, email).stream().findFirst();
+
     }
 }

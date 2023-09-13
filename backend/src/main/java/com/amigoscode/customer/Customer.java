@@ -4,7 +4,12 @@ import com.amigoscode.exception.RequestValidationException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -19,7 +24,42 @@ import java.util.Objects;
 )
 
 
-public class Customer {
+public class Customer implements UserDetails {
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
     public enum Gender {
         MALE("Male"), FEMALE("Female"), OTHER("Other");
@@ -70,6 +110,9 @@ public class Customer {
     @Column(nullable = false)
     private Integer age;
 
+    @Column(nullable = false)
+    private String password;
+
 
     @Column(nullable=false)
     @Enumerated(EnumType.STRING)
@@ -78,17 +121,27 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(String name, String email, Integer age, String gender) {
+    public Customer(String name,
+                    String email,
+                    String password,
+                    Integer age,
+                    String gender) {
         this.name = name;
         this.email = email;
+        this.password = password;
         this.age = age;
         this.gender = Gender.fromValue(gender);
     }
 
-    public Customer(Long id, String name, String email, Integer age, String gender) {
+    public Customer(Long id,
+                    String name,
+                    String email,
+                    String password, Integer age,
+                    String gender){
         this.id = id;
         this.name = name;
         this.email = email;
+        this.password = password;
         this.age = age;
         this.gender = Gender.fromValue(gender);
     }
@@ -115,6 +168,11 @@ public class Customer {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Integer getAge() {

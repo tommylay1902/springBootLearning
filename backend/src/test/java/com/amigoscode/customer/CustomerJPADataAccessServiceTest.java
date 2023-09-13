@@ -6,11 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Random;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CustomerJPADataAccessServiceTest {
 
@@ -56,7 +53,7 @@ class CustomerJPADataAccessServiceTest {
         Random random = new Random();
         Customer.Gender randomGender = Customer.Gender.values()[random.nextInt(Customer.Gender.values().length)];
 
-        Customer customer = new Customer(1L, "tommy", "t@gmail.com", 2, randomGender.getValue());
+        Customer customer = new Customer(1L, "tommy", "t@gmail.com", "password", 2, randomGender.getValue());
 
         //When
         underTest.insertCustomer(customer);
@@ -102,7 +99,7 @@ class CustomerJPADataAccessServiceTest {
         Random random = new Random();
         Customer.Gender randomGender = Customer.Gender.values()[random.nextInt(Customer.Gender.values().length)];
 
-        Customer customer = new Customer(1L, "tommy", "t@gmail.com", 2, randomGender.getValue());
+        Customer customer = new Customer(1L, "tommy", "t@gmail.com", "password", 2, randomGender.getValue());
 
         //When
         underTest.updateCustomer(customer);

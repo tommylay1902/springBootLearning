@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
-import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -20,7 +18,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.*;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 public class CustomerIT {
@@ -42,7 +40,7 @@ public class CustomerIT {
 
         int age = RANDOM.nextInt(1,100);
 
-        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, age, randomGender.getValue());
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, "password", age, randomGender.getValue());
         //send a post request
         //    NEVER DO THIS!!! We never want to invoke the method directly from the controller
         //    @Autowired
@@ -65,7 +63,7 @@ public class CustomerIT {
                 .returnResult()
                 .getResponseBody();
 
-        Customer expectedCustomer = new Customer( name, email, age, randomGender.getValue());
+        Customer expectedCustomer = new Customer( name, email, "password", age, randomGender.getValue());
         //make sure that customer is present
         assertThat(customers)
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
@@ -101,7 +99,7 @@ public class CustomerIT {
         int age = RANDOM.nextInt(1,100);
         String gender = "Male";
 
-        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, age, gender);
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, "password", age, gender);
         //send a post request
         webTestClient.post().uri(baseURI)
                 .accept(MediaType.APPLICATION_JSON)
@@ -156,7 +154,7 @@ public class CustomerIT {
 
 
 
-        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, age, "Male");
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, "password", age, "Male");
         //send a post updateRequest
         webTestClient.post().uri(baseURI)
                 .accept(MediaType.APPLICATION_JSON)
@@ -215,7 +213,7 @@ public class CustomerIT {
                 .getResponseBody();
 
 
-        Customer expected = new Customer(id, nameUpdate, emailUpdate, ageUpdate, genderUpdate);
+        Customer expected = new Customer(id, nameUpdate, emailUpdate, "password", ageUpdate, genderUpdate);
 
         //test updateRequest to actual
         assertThat(actual).usingRecursiveComparison().ignoringFields("id").isEqualTo(expected);
