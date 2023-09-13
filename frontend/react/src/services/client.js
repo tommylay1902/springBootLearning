@@ -28,6 +28,7 @@ export const deleteCustomerWithId = async (id) => {
         )
     } catch (e) {
         throw e;
+
     }
 }
 
