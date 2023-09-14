@@ -1,10 +1,12 @@
 package com.amigoscode.customer;
 
-import com.amigoscode.exception.RequestValidationException;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -19,37 +21,72 @@ import java.util.Objects;
 )
 
 
-public class Customer {
+public class Customer implements UserDetails {
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
     public enum Gender {
-        MALE("Male"), FEMALE("Female"), OTHER("Other");
-        private final String value;
-
-        Gender(String value) {
-            this.value = value;
-        }
-
-        @JsonCreator
-        public static Gender fromValue(String value) {
-            for (Gender gender : Gender.values()) {
-                if (gender.value.equalsIgnoreCase(value)) {
-                    return gender;
-                }
-            }
-            throw new RequestValidationException("Please choose between 'Male', 'Female' or 'Other'. Gender: '" + value + "' is invalid");
-        }
-
-        @JsonValue
-        public String getValue() {
-            return value;
-        }
-
-        @Override
-        public String toString() {
-            return "Gender{" +
-                    "value='" + value + '\'' +
-                    '}';
-        }
+        MALE, FEMALE, OTHER;
+//        private final String value;
+//
+//        Gender(String value) {
+//            this.value = value;
+//        }
+//
+//        @JsonCreator
+//        public static Gender fromValue(String value) {
+//            for (Gender gender : Gender.values()) {
+//                if (gender.value.equalsIgnoreCase(value)) {
+//                    return gender;
+//                }
+//            }
+//            throw new RequestValidationException("Please choose between 'Male', 'Female' or 'Other'. Gender: '" + value + "' is invalid");
+//        }
+//
+//        @JsonValue
+//        public String getValue() {
+//            return value;
+//        }
+//
+//        @Override
+//        public String toString() {
+//            return "Gender{" +
+//                    "value='" + value + '\'' +
+//                    '}';
+//        }
     }
 
     @Id
@@ -70,6 +107,9 @@ public class Customer {
     @Column(nullable = false)
     private Integer age;
 
+    @Column(nullable = false)
+    private String password;
+
 
     @Column(nullable=false)
     @Enumerated(EnumType.STRING)
@@ -78,19 +118,30 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(String name, String email, Integer age, String gender) {
+    public Customer(String name,
+                    String email,
+                    String password,
+                    Integer age,
+                    Gender gender) {
         this.name = name;
         this.email = email;
+        this.password = password;
         this.age = age;
-        this.gender = Gender.fromValue(gender);
+        this.gender = gender;
     }
 
-    public Customer(Long id, String name, String email, Integer age, String gender) {
+    public Customer(Long id,
+                    String name,
+                    String email,
+                    String password,
+                    Integer age,
+                    Gender gender){
         this.id = id;
         this.name = name;
         this.email = email;
+        this.password = password;
         this.age = age;
-        this.gender = Gender.fromValue(gender);
+        this.gender = gender;
     }
 
     public Long getId() {
@@ -117,6 +168,11 @@ public class Customer {
         this.email = email;
     }
 
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Integer getAge() {
         return age;
     }
@@ -125,8 +181,8 @@ public class Customer {
         this.age = age;
     }
 
-    public String getGender() {
-        return gender.getValue();
+    public Gender getGender() {
+        return gender;
     }
 
     public void setGender(Gender gender) {
@@ -138,12 +194,12 @@ public class Customer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
-        return age == customer.age && Objects.equals(id, customer.id) && Objects.equals(name, customer.name) && Objects.equals(email, customer.email) && Objects.equals(gender.getValue(), customer.gender.getValue());
+        return age == customer.age && Objects.equals(id, customer.id) && Objects.equals(name, customer.name) && Objects.equals(email, customer.email) && Objects.equals(gender, customer.gender);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, age, gender);
+        return Objects.hash(id, name, email, password, age, gender);
     }
 
     @Override
@@ -152,6 +208,7 @@ public class Customer {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 ", age=" + age +
                 ", gender=" + gender +
                 '}';
