@@ -20,26 +20,20 @@ public class CustomerController {
     }
 
     @GetMapping("")
-    public List<Customer> getCustomers(){
+    public List<CustomerDTO> getCustomers(){
         return customerService.getAllCustomers();
     }
 
     @GetMapping("/{id}")
-    public Customer getCustomer(@PathVariable("id") Long id){
+    public CustomerDTO getCustomer(@PathVariable("id") Long id){
        return customerService.getCustomer(id);
     }
 
     @PostMapping("")
     public ResponseEntity<?> registerCustomer(@RequestBody CustomerRegistrationRequest request){
-        try{
             customerService.addCustomer(request);
             String jwtToken = jwtUtil.issueToken(request.email(), "ROLE_USER");
             return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwtToken).build();
-        }catch (Exception e){
-           e.printStackTrace();
-           return ResponseEntity.badRequest().build();
-        }
-
     }
 
     @DeleteMapping("/{id}")

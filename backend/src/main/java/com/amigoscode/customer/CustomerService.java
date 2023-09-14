@@ -9,24 +9,29 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
 
     private final CustomerDAO customerDAO;
+    private final CustomerDTOMapper customerDTOMapper;
     private static final Logger LOGGER = Logger.getLogger(CustomerService.class.getName());
     private final PasswordEncoder passwordEncoder;
-    public CustomerService(@Qualifier("jdbc") CustomerDAO customerDAO, PasswordEncoder passwordEncoder) {
+    public CustomerService(@Qualifier("jdbc") CustomerDAO customerDAO, CustomerDTOMapper customerDTOMapper, PasswordEncoder passwordEncoder) {
         this.customerDAO = customerDAO;
+        this.customerDTOMapper = customerDTOMapper;
         this.passwordEncoder = passwordEncoder;
     }
 
-    public List<Customer> getAllCustomers(){
-        return customerDAO.selectAllCustomer();
+    public List<CustomerDTO> getAllCustomers(){
+        return customerDAO.selectAllCustomer().stream().map(customerDTOMapper).collect(Collectors.toList());
     }
 
-    public Customer getCustomer(Long id){
-        return customerDAO.selectCustomerById(id).orElseThrow(() -> new ResourceNotFoundException("Customer resource not found"));
+    public CustomerDTO getCustomer(Long id){
+        return customerDAO.selectCustomerById(id)
+                .map(customerDTOMapper)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer resource not found"));
     }
 
     public void addCustomer(CustomerRegistrationRequest customerRegistrationRequest){
@@ -51,7 +56,7 @@ public class CustomerService {
     }
 
     public void updateCustomerInfo(Long id, CustomerUpdateRequest customerUpdateRequest){
-        Customer customerToUpdate = getCustomer(id);
+        Customer customerToUpdate = customerDAO.selectCustomerById(id).orElseThrow(() ->  new ResourceNotFoundException("customer not found"));
 
         boolean changes = false;
 

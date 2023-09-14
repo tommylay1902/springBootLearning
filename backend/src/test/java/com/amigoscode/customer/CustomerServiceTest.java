@@ -25,12 +25,14 @@ class CustomerServiceTest {
     private CustomerDAO customerDao;
     @Mock
     private PasswordEncoder passwordEncoder;
+
+    private final CustomerDTOMapper customerDTOMapper = new CustomerDTOMapper();
     private CustomerService underTest;
     AutoCloseable autoCloseable;
 
     @BeforeEach
     void setUp() {
-        underTest = new CustomerService(customerDao, passwordEncoder);
+        underTest = new CustomerService(customerDao, customerDTOMapper, passwordEncoder);
     }
 
     @Test
@@ -53,6 +55,20 @@ class CustomerServiceTest {
         assertThatThrownBy(() -> underTest.getCustomer(id))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("Customer resource not found");
+    }
+
+    @Test
+    void canGetCustomer() {
+        //Given
+        Long id = 10L;
+        Customer customer = new Customer(id, "alex", "alex@gmail.com", "password", 19, Customer.Gender.MALE);
+        when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
+
+        CustomerDTO expected = customerDTOMapper.apply(customer);
+        //When
+        CustomerDTO actual = underTest.getCustomer(id);
+        //Then
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
