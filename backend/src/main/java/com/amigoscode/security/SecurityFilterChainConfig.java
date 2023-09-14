@@ -27,18 +27,18 @@ public class SecurityFilterChainConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.POST, "/api/v1/customers").permitAll()
-                .requestMatchers(HttpMethod.GET, "/ping").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/customers")
+                .permitAll()
+                .requestMatchers(HttpMethod.GET, "/ping")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.NEVER)
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(

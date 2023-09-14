@@ -31,9 +31,15 @@ public class CustomerController {
 
     @PostMapping("")
     public ResponseEntity<?> registerCustomer(@RequestBody CustomerRegistrationRequest request){
-        customerService.addCustomer(request);
-        String jwtToken = jwtUtil.issueToken(request.email(), "ROLE_USER");
-        return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwtToken).build();
+        try{
+            customerService.addCustomer(request);
+            String jwtToken = jwtUtil.issueToken(request.email(), "ROLE_USER");
+            return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwtToken).build();
+        }catch (Exception e){
+           e.printStackTrace();
+           return ResponseEntity.badRequest().build();
+        }
+
     }
 
     @DeleteMapping("/{id}")

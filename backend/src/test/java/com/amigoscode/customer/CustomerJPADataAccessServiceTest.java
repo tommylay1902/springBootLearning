@@ -53,7 +53,7 @@ class CustomerJPADataAccessServiceTest {
         Random random = new Random();
         Customer.Gender randomGender = Customer.Gender.values()[random.nextInt(Customer.Gender.values().length)];
 
-        Customer customer = new Customer(1L, "tommy", "t@gmail.com", "password", 2, randomGender.getValue());
+        Customer customer = new Customer(1L, "tommy", "t@gmail.com", "password", 2, randomGender);
 
         //When
         underTest.insertCustomer(customer);
@@ -99,7 +99,7 @@ class CustomerJPADataAccessServiceTest {
         Random random = new Random();
         Customer.Gender randomGender = Customer.Gender.values()[random.nextInt(Customer.Gender.values().length)];
 
-        Customer customer = new Customer(1L, "tommy", "t@gmail.com", "password", 2, randomGender.getValue());
+        Customer customer = new Customer(1L, "tommy", "t@gmail.com", "password", 2, randomGender);
 
         //When
         underTest.updateCustomer(customer);

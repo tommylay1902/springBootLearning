@@ -35,11 +35,10 @@ public class Main {
         Random r = new Random();
 
         Customer.Gender randomGender = Customer.Gender.values()[r.nextInt(Customer.Gender.values().length)];
-        LOGGER.info(randomGender.getValue());
 
         return args -> {
-            Customer customer1 = new Customer( nameOne, faker.internet().emailAddress(), passwordEncoder.encode(UUID.randomUUID().toString()), r.nextInt(16, 29), randomGender.getValue());
-            Customer customer2 = new Customer( nameTwo,  faker.internet().emailAddress(),  passwordEncoder.encode(UUID.randomUUID().toString()), r.nextInt(16, 29), randomGender.getValue());
+            Customer customer1 = new Customer( nameOne, faker.internet().emailAddress(), passwordEncoder.encode(UUID.randomUUID().toString()), r.nextInt(16, 29), randomGender);
+            Customer customer2 = new Customer( nameTwo,  faker.internet().emailAddress(),  passwordEncoder.encode(UUID.randomUUID().toString()), r.nextInt(16, 29), randomGender);
             List<Customer> customers = List.of(customer1, customer2);
             customerRepository.saveAll(customers);
         };

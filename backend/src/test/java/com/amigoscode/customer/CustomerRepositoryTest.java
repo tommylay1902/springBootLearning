@@ -41,7 +41,7 @@ class CustomerRepositoryTest {
                 email,
                 "password",
                 20,
-                randomGender.getValue()
+                randomGender
         );
 
         underTest.save(customer);

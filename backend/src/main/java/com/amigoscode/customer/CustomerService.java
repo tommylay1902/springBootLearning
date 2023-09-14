@@ -33,9 +33,6 @@ public class CustomerService {
         if(customerDAO.existsPersonWithEmail(customerRegistrationRequest.email())){
             throw new DuplicateResourceException("Email already exists");
         }
-        if(customerRegistrationRequest.gender().isEmpty()){
-            throw new RequestValidationException("Please specify 'Male', 'Female' or 'Other' for your gender");
-        }
 
         Customer customerToInsert = new Customer(
                 customerRegistrationRequest.name(),
@@ -89,7 +86,7 @@ public class CustomerService {
                 && !customerUpdateRequest.gender().equals(customerToUpdate.getGender())
         ){
 
-            customerToUpdate.setGender(Customer.Gender.fromValue(customerUpdateRequest.gender()));
+            customerToUpdate.setGender(customerUpdateRequest.gender());
             changes = true;
         }
         if(!changes){

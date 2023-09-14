@@ -40,7 +40,7 @@ public class CustomerIT {
 
         int age = RANDOM.nextInt(1,100);
 
-        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, "password", age, randomGender.getValue());
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, "password", age, randomGender);
         //send a post request
         //    NEVER DO THIS!!! We never want to invoke the method directly from the controller
         //    @Autowired
@@ -63,7 +63,7 @@ public class CustomerIT {
                 .returnResult()
                 .getResponseBody();
 
-        Customer expectedCustomer = new Customer( name, email, "password", age, randomGender.getValue());
+        Customer expectedCustomer = new Customer( name, email, "password", age, randomGender);
         //make sure that customer is present
         assertThat(customers)
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
@@ -97,9 +97,8 @@ public class CustomerIT {
         String email = fakerName.firstName() + UUID.randomUUID() + "@gmail.com";
 
         int age = RANDOM.nextInt(1,100);
-        String gender = "Male";
 
-        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, "password", age, gender);
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, "password", age, Customer.Gender.MALE);
         //send a post request
         webTestClient.post().uri(baseURI)
                 .accept(MediaType.APPLICATION_JSON)
@@ -154,7 +153,7 @@ public class CustomerIT {
 
 
 
-        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, "password", age, "Male");
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, "password", age, Customer.Gender.MALE);
         //send a post updateRequest
         webTestClient.post().uri(baseURI)
                 .accept(MediaType.APPLICATION_JSON)
@@ -189,7 +188,7 @@ public class CustomerIT {
         String nameUpdate = fakerNameUpdate.fullName();
         String emailUpdate = fakerNameUpdate.firstName() + UUID.randomUUID() + "@gmail.com";
         int ageUpdate = RANDOM.nextInt(1,100);
-        String genderUpdate = "Female";
+        Customer.Gender genderUpdate = Customer.Gender.FEMALE;
 
 
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(nameUpdate, emailUpdate,  ageUpdate, genderUpdate);

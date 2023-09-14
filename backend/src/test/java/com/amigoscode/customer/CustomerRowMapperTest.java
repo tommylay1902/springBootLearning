@@ -22,12 +22,12 @@ class CustomerRowMapperTest {
         when(resultSet.getString("name")).thenReturn("tommy");
         when(resultSet.getString("email")).thenReturn("tommy@gmail.com");
         when(resultSet.getInt("age")).thenReturn(22);
-        when(resultSet.getString("gender")).thenReturn("Male");
+        when(resultSet.getString("gender")).thenReturn("MALE");
 
         //When
         Customer actual = customerRowMapper.mapRow(resultSet, 1);
 
-        Customer expected = new Customer(1L, "tommy", "tommy@gmail.com", "password", 22, "Male");
+        Customer expected = new Customer(1L, "tommy", "tommy@gmail.com", "password", 22, Customer.Gender.MALE);
 
         //Then
 

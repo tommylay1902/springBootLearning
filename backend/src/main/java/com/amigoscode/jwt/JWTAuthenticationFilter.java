@@ -15,10 +15,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 @Component
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
+    private Logger LOGGER = Logger.getLogger(JWTAuthenticationFilter.class.getName());
     private final JWTUtil jwtUtil;
     private final CustomerUserDetailsService customerUserDetailsService;
 
@@ -36,16 +38,16 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
         if(authHeader == null || !authHeader.startsWith("Bearer ")){
             filterChain.doFilter(request, response);
+            return;
         }
 
-        assert authHeader != null;
         String jwt = authHeader.substring(7);
         String subject = jwtUtil.getSubject(jwt);
 
         if (subject != null &&
-                SecurityContextHolder.getContext().getAuthentication() == null){
+                SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = customerUserDetailsService.loadUserByUsername(subject);
-            if(jwtUtil.isTokenValid(jwt, userDetails.getUsername())){
+            if (jwtUtil.isTokenValid(jwt, userDetails.getUsername())) {
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails, null, userDetails.getAuthorities()
@@ -55,8 +57,9 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                 );
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-            filterChain.doFilter(request, response);
         }
+        filterChain.doFilter(request, response);
+
 
     }
 }
