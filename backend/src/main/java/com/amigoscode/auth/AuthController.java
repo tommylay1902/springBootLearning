@@ -22,6 +22,7 @@ public class AuthController {
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
         AuthResponse res = authService.login(loginRequest);
+        // IN FUTURE REMOVE THE PAYLOAD RETURN FROM THE BODY, JUST NEED TO RETURN THE TOKEN
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.AUTHORIZATION, res.token())
