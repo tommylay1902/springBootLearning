@@ -67,4 +67,15 @@ public class DefaultExceptionHandler {
 
         return new ResponseEntity<>(apiError, HttpStatus.CONFLICT);
     }
+    @ExceptionHandler(com.amigoscode.exception.AuthenticationException.class)
+    public ResponseEntity<ApiError> handleException(com.amigoscode.exception.AuthenticationException e, HttpServletRequest request, HttpServletResponse response){
+        ApiError apiError = new ApiError(
+                request.getRequestURI(),
+                e.getMessage(),
+                HttpStatus.UNAUTHORIZED.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
+    }
 }
