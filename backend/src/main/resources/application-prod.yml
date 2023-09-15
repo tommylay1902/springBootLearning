@@ -9,6 +9,8 @@ spring:
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
     driverClassName: org.postgresql.Driver
+    hikari:
+      max-lifetime: 700000
   jpa:
     hibernate:
       ddl-auto: validate
