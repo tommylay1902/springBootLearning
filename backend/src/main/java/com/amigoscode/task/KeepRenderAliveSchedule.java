@@ -23,7 +23,6 @@ public class KeepRenderAliveSchedule {
         this.restTemplate = restTemplate;
     }
 
-    @Transactional
     @Scheduled(fixedRate = 780000L)
     public void pingBackendJob() {
         LOGGER.info("pinging backend");
@@ -31,8 +30,7 @@ public class KeepRenderAliveSchedule {
 
     }
 
-
-    @Transactional
+    
     @Scheduled(fixedRate = 780000L)
     public void pingFrontendJob() {
         LOGGER.info("pinging frontend");
