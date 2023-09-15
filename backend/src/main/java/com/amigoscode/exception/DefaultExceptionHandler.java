@@ -32,6 +32,7 @@ public class DefaultExceptionHandler {
     public ResponseEntity<ApiError> handleException(AuthenticationException e, HttpServletRequest request, HttpServletResponse response){
 
         LOGGER.info("hit this exception handler");
+        LOGGER.info(e.getMessage());
 
         ApiError apiError = new ApiError(
             request.getRequestURI(),
