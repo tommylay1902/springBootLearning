@@ -33,6 +33,7 @@ public class DefaultExceptionHandler {
 
         LOGGER.info("hit this exception handler");
         LOGGER.info(e.getMessage());
+        LOGGER.info(request.getRequestURI());
 
         ApiError apiError = new ApiError(
             request.getRequestURI(),
