@@ -29,19 +29,19 @@ public class DefaultExceptionHandler {
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ApiError> handleException(UsernameNotFoundException e, HttpServletRequest request, HttpServletResponse response){
+    public ResponseEntity<ApiError> handleException(AuthenticationException e, HttpServletRequest request, HttpServletResponse response){
 
         LOGGER.info("hit this exception handler");
 
         ApiError apiError = new ApiError(
             request.getRequestURI(),
             e.getMessage(),
-            HttpStatus.NOT_FOUND.value(),
+            HttpStatus.UNAUTHORIZED.value(),
             LocalDateTime.now()
         );
 
 
-        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(RequestValidationException.class)
@@ -66,5 +66,16 @@ public class DefaultExceptionHandler {
         );
 
         return new ResponseEntity<>(apiError, HttpStatus.CONFLICT);
+    }
+    @ExceptionHandler(com.amigoscode.exception.AuthenticationException.class)
+    public ResponseEntity<ApiError> handleException(com.amigoscode.exception.AuthenticationException e, HttpServletRequest request, HttpServletResponse response){
+        ApiError apiError = new ApiError(
+                request.getRequestURI(),
+                e.getMessage(),
+                HttpStatus.UNAUTHORIZED.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
     }
 }
