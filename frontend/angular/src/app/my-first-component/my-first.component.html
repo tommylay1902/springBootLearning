@@ -1,11 +1,11 @@
-<h3>this is the first component you have created in angular</h3>
 
-<input type="text" (keyup.enter)="onClickHandler()" [(ngModel)]="inputValue" />
-<button (click)="onClickHandler()">Click me!</button>
-<div *ngIf="doneLoading">
-  <p *ngFor="let msg of messages;">{{msg}}</p>
-</div>
-<div *ngIf="!doneLoading">
-  loading messages ...
-</div>
+
+<input type="text"  [(ngModel)]="valueOne" />
+<input type="text"  [(ngModel)]="valueTwo" />
+<br>
+<p>Result = {{result}}</p>
+<button (click)="sum()">+</button>
+<button (click)="subtract()">-</button>
+<button (click)="multiple()">*</button>
+<button (click)="divide()">/</button>
 
