@@ -1,4 +1,5 @@
 import {Component, Output} from '@angular/core';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-root',
@@ -10,5 +11,9 @@ export class AppComponent {
 
   clickCount: number = 0;
   lastCreatedElement: string = ''
+
+  constructor(private router:Router){
+
+  }
 
 }
